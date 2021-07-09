@@ -6,13 +6,13 @@ from pathlib import Path
 
 
 def VAERS_data():
-    data_path = Path("./archive")
-    VAERS_path = data_path / "2021VAERSData"
+    data_path_2021 = Path("./data/2021VAERSData")
 
-    data = pd.read_csv(
-        VAERS_path / "2021VAERSData.csv", encoding="ISO-8859-1", low_memory=False
+
+    patients = pd.read_csv(
+        data_path_2021 / "2021VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
     )
-    data = data.drop(
+    patients = patients.drop(
         [
             "RECVDATE",
             "CAGE_YR",
@@ -47,18 +47,15 @@ def VAERS_data():
         ],
         axis=1,
     )
-
-    # defines new data frame with removed men
-    data_females = data[data.SEX == "F"]
-
-    # making data frame including only fertile women
-    data_fertile_females = data_females[
-        (data_females.AGE_YRS >= 15.0) & (data_females.AGE_YRS <= 50.0)
-    ]
-
+    """
+    focus0=pd.merge(data,symptom,on='VAERS_ID')
+    focus1=pd.merge(focus0,vax,on='VAERS_ID')
+    focus1.columns
+    """
     symptoms = pd.read_csv(
-        VAERS_path / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
+        data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
     )
+
     symptoms = symptoms.drop(
         [
             "SYMPTOMVERSION1",
@@ -70,15 +67,25 @@ def VAERS_data():
         axis=1,
     )
 
-    #symptoms = symptoms[symptoms.VAERS_ID == data_fertile_females["VAERS_ID"]]
-
     vax = pd.read_csv(
-        VAERS_path / "2021VAERSVAX.csv", encoding="ISO-8859-1", low_memory=False
+        data_path_2021 / "2021VAERSVAX.csv", encoding="ISO-8859-1", low_memory=False
     )
 
     vax = vax.drop(["VAX_LOT", "VAX_ROUTE", "VAX_SITE", "VAX_NAME"], axis=1)
-    vax = vax[vax.VAX_TYPE == "COVID19"]
-    #vax = vax[vax.VAERS_ID == data_fertile_females["VAERS_ID"]]
+
+    patients_symptoms = pd.merge(patients, symptoms, on="VAERS_ID")
+    data = pd.merge(patients_symptoms, vax, on="VAERS_ID")
+
+    # defines new data frame with removed men
+    data_females = data[data.SEX == "F"]
+    data_females = data_females[data_females.VAX_TYPE == "COVID19"]
+    data_females = data_females.drop(["VAX_TYPE", "SEX"], axis=1)
+
+    # making data frame including only fertile women
+    data_fertile_females = data_females[
+        (data_females.AGE_YRS >= 15.0) & (data_females.AGE_YRS <= 50.0)
+    ]
+
 
     return data_fertile_females, symptoms, vax
 
@@ -86,9 +93,9 @@ def VAERS_data():
 if __name__ == "__main__":
     data, symptoms, vax = VAERS_data()
     #print(len(data)) # 12801
-    print(symptoms.head())
+    print(data.head())
     symptoms_tot = pd.concat([symptoms.SYMPTOM1, symptoms.SYMPTOM2, symptoms.SYMPTOM3, symptoms.SYMPTOM4, symptoms.SYMPTOM5])
     #print(symptoms_tot.nunique()) # number of unique symptoms=4235, length of all symptom entries is 240550
     sorted = symptoms_tot.sort_values(ascending=True)
     unique_sorted_symptoms_tot = sorted.drop_duplicates()
-    unique_sorted_symptoms_tot.to_csv('list_of_unique_symptoms_covid19.csv')
+    #unique_sorted_symptoms_tot.to_csv('list_of_unique_symptoms_covid19.csv')
