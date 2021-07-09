@@ -20,7 +20,7 @@ def cases_vs_vaccinated_hist():
     ax1.set_ylabel("Count per 100 000")
     ax1.set_title("Number of vaccinated norwegian women of different age groups", size=10)
     ax1.set_xticks(ind+width)
-    ax2.set_xticklabels(("16-17","18-24","25-39","40-44"),fontsize=8)
+    ax1.set_xticklabels(("16-17","18-24","25-39","40-44"),fontsize=8)
 
     # BMI groups
     cases = (3494,3664,2740,2650)
