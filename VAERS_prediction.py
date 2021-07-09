@@ -47,11 +47,8 @@ def VAERS_data():
         ],
         axis=1,
     )
-    """
-    focus0=pd.merge(data,symptom,on='VAERS_ID')
-    focus1=pd.merge(focus0,vax,on='VAERS_ID')
-    focus1.columns
-    """
+    #print(len(patients)) #397444
+
     symptoms = pd.read_csv(
         data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
     )
@@ -92,8 +89,8 @@ def VAERS_data():
 
 if __name__ == "__main__":
     data, symptoms, vax = VAERS_data()
-    #print(len(data)) # 12801
-    print(data.head())
+    print(len(data)) # 199157
+    #print(data.head())
     symptoms_tot = pd.concat([symptoms.SYMPTOM1, symptoms.SYMPTOM2, symptoms.SYMPTOM3, symptoms.SYMPTOM4, symptoms.SYMPTOM5])
     #print(symptoms_tot.nunique()) # number of unique symptoms=4235, length of all symptom entries is 240550
     sorted = symptoms_tot.sort_values(ascending=True)
