@@ -10,7 +10,7 @@ def VAERS_data():
     VAERS_path = data_path / "VAERS"
 
     data = pd.read_csv(
-        VAERS_path / "2021VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
+        VAERS_path / "2021VAERSData.csv", encoding="ISO-8859-1", low_memory=False
     )
     data = data.drop(
         [
