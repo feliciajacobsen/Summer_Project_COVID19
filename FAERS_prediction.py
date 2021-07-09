@@ -3,20 +3,27 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 
 def VAERS_data():
-    data_path = Path("./data")
-    FAERS_path = data_path / "FAERS"
-
-    data = pd.read_xml(
+    data_path = Path("./archive/faers_xml_2021Q1")
+    FAERS_path = data_path / "XML"
+    
+    tree = ET.parse(
         FAERS_path / "1_ADR21Q1_format.xml"
     )
+    root = tree.getroot()
+    """
+    for x in root.findall("safetyreport"):
+        print(x.tag, x.attrib)
+    """
+    for x in root[1].findall("patient"):
+        age = x.find("patientonsetage").text
+        sex = x.find("patientsex").text
+        print(age, sex)
+    
+    
+   
 
-    #data = data[data.reactionmeddrapt == "COVID19"]
-
-    return data
-
-data = VAERS_data()
-for col in data.columns:
-    print(col)
+VAERS_data()

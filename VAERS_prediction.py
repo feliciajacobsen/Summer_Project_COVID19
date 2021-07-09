@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def VAERS_data():
-    data_path = Path("./data")
+    data_path = Path("./archive")
     VAERS_path = data_path / "VAERS"
 
     data = pd.read_csv(
