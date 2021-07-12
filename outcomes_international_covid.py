@@ -153,14 +153,15 @@ def CVD_hist():
     plt.show()
 
 
-def outcomes_pregnant_histogram():
+def outcomes_pregnant_vs_nonpregnant_histogram():
     """
     The following histogram visualises the number of events per 1000 cases for
-    pregnant women infected with SARS-CoV-2.
+    pregnant and non-pregnant women infected with SARS-CoV-2.
 
     The histogram visualises the number of events for each of the various outcomes of
     the disease.
     """
+    plt.subplot(211)
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
     values = [np.array([10.5, 2.9, 1.5]), np.array([9.1, 2.3, 1.2]), np.array([19.4, 6.5, 4.2]), np.array([58.5,23.4,14.1]), np.array([42.8,19.7,23.0])]
@@ -172,16 +173,12 @@ def outcomes_pregnant_histogram():
         position = x + (w*(1-n)/2) + i*w
         plt.bar(position, value, width=w, label=label)
 
-    plt.xticks(x, outcomes);
+    plt.xticks(x, outcomes, size=8)
     plt.ylabel('Count per 1000 cases')
-    plt.title("Outcomes in pregant women with Sars-Cov-2")
-    plt.legend()
+    plt.title("Outcomes in pregant women with SARS-Cov-2", size=8)
+    plt.legend(fontsize=8)
 
-    plt.show()
-
-
-
-def outcomes_non_pregnant_histogram():
+    plt.subplot(212)
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
     values = [np.array([3.9, 1.1, 1.2]), np.array([3.5, 0.9, 0.9]), np.array([6.4,1.8,2.3]), np.array([44.8,16.0,12.7]), np.array([32.1,10.6,11.6])]
@@ -193,10 +190,10 @@ def outcomes_non_pregnant_histogram():
         position = x + (w*(1-n)/2) + i*w
         plt.bar(position, value, width=w, label=label)
 
-    plt.xticks(x, outcomes)
+    plt.xticks(x, outcomes, size=8)
     plt.ylabel('Count per 1000 cases')
-    plt.title("Outcomes in non-pregant women with Sars-Cov-2")
-    plt.legend()
+    plt.title("Outcomes in non-pregant women with SARS-Cov-2", size=8)
+    plt.legend(fontsize=8)
 
     plt.show()
 
@@ -224,7 +221,7 @@ def RR():
     plt.xticks(x, outcomes)
     plt.ylabel("Risk ratio")
     plt.title("Risk ratios for various outcomes of women with Sars-Cov-2:\n pregnant vs non-pregnant with 95% confidence interval.")
-    plt.legend()
+    plt.legend(fontsize=8)
 
     plt.show()
 
@@ -242,7 +239,7 @@ def OR():
     upper_cf = np.array([np.array([2.63,2.63,4.97,3.72]),np.array([3.07,6.63,22.02,4.31]), np.array([2.20,2.15,15.68,8.17]),np.array([3.48,9.41,420.48,9.95]),np.array([2.78,11.22,1324.16,52.81])])-values
     lower_cf = values-np.array([np.array([1.27,1.69,0.60,0.22]),np.array([1.83,1.10,1.98,1.20]),np.array([1.49,1.34,1.76,0.78]),np.array([1.14,2.37,9.69,1.82]),np.array([1.62,1.94,0.26,4.19])])
     tot_cf = np.array([lower_cf, upper_cf])
-    cf_labels = np.array([["1.27-2.63","1.69-2.63","0.60-4.97","0.22-3.72"], ["1.83-3.07","1.10-6.63","1.98-22.02","1.20-4.31"], ["1.49-2.20","1.34-2.15","1.76-15.68","0.78-8.17"], ["1.14-3.48","2.37-9.41","9.69-420.48","1.82-9.95"], ["1.62-2.78","1.94-11.22","0.26-1324.16","4.19-52.81"]])
+    labels_cf = np.array([["1.27-2.63","1.69-2.63","0.60-4.97","0.22-3.72"], ["1.83-3.07","1.10-6.63","1.98-22.02","1.20-4.31"], ["1.49-2.20","1.34-2.15","1.76-15.68","0.78-8.17"], ["1.14-3.48","2.37-9.41","9.69-420.48","1.82-9.95"], ["1.62-2.78","1.94-11.22","0.26-1324.16","4.19-52.81"]])
     n = len(values)                # Number of bars to plot
     w = .15                        # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
@@ -250,12 +247,12 @@ def OR():
     for i, value, label in zip(range(5), values, labels):
         position = x + (w*(1-n)/2) + i*w
         bars=ax.bar(position, value, width=w, label=label)
-        ax.bar_label(container=bars,labels=cf_labels[i], padding=-5, size=5, rotation=45)
+        ax.bar_label(container=bars,labels=labels_cf[i], padding=-5, size=5, rotation=45)
 
     plt.xticks(x, outcomes)
     plt.ylabel("Odds ratio")
-    plt.title("Odds ratios of maternal risk factors assiciated with severe Sars-Cov-2")
-    plt.legend()
+    plt.title("Odds ratios of maternal risk factors assiciated with severe SARS-Cov-2")
+    plt.legend(fontsize=8)
 
     plt.show()
 
@@ -264,14 +261,14 @@ def OR():
 def preg_women_hist():
     """
     The following histogram visualizes the odds ratio of different outcomes between
-    pregnant women with and without Sars-CoV-2 infection.
+    pregnant women with and without SARS-CoV-2 infection.
     """
     plt.subplot(211)
     outcomes = ["Maternal outcomes"]
     values = [np.array([18.58]), np.array([1.47]), np.array([2.85])]
-    cf_upper = np.array([np.array([45.82]),np.array([1.91]),np.array([7.52])])-values
-    cf_lower = values-np.array([np.array([7.53]),np.array([1.14]),np.array([1.08])])
-    cf_tot = np.array([cf_lower, cf_upper])
+    upper_cf = np.array([np.array([45.82]),np.array([1.91]),np.array([7.52])])-values
+    lower_cf = values-np.array([np.array([7.53]),np.array([1.14]),np.array([1.08])])
+    tot_cf = np.array([lower_cf, upper_cf])
     n = len(values)                # Number of bars to plot
     w = .15                        # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
@@ -279,11 +276,11 @@ def preg_women_hist():
 
     for i, value, label in zip(range(3), values, labels):
         position = x + (w*(1-n)/2) + i*w
-        plt.bar(position, value, width=w, label=label, yerr=cf_tot[:,i], capsize=2)
+        plt.bar(position, value, width=w, label=label, yerr=tot_cf[:,i], capsize=2)
 
     plt.xticks(x, outcomes)
     plt.ylabel("Odds ratio")
-    plt.title("Odds ratios for various outcomes of pregnant women:\n Sars-Cov-2 infected vs non-infected with 95% confidence interval.")
+    plt.title("Odds ratios for various outcomes of pregnant women:\n SARS-Cov-2 infected vs non-infected with 95% confidence interval.")
     plt.xlim([-0.5,0.5])
     plt.legend()
 
@@ -308,8 +305,7 @@ if __name__ == "__main__":
     #age_35_44_hist()
     #diabetes_hist()
     #CVD_hist()
-    #outcomes_pregnant_histogram()
-    #outcomes_non_pregnant_histogram()
-    #RR()
-    #OR()
+    outcomes_pregnant_vs_nonpregnant_histogram()
+    RR()
+    OR()
     preg_women_hist()
