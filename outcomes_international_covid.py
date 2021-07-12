@@ -98,10 +98,10 @@ def age_35_44_hist():
 
 
 def diabetes_hist():
-    N = 2
+    N = 3
 
-    preg = (58.5, 14.1)
-    non_preg = (44.8, 12.7)
+    preg = (58.5, 23.4,14.1)
+    non_preg = (44.8, 16.0, 12.7)
 
 
     ind = np.arange(N) + .15 # the x locations for the groups
@@ -127,10 +127,10 @@ def diabetes_hist():
 
 
 def CVD_hist():
-    N = 2
+    N = 3
 
-    preg = (23.0)
-    non_preg = (11.6)
+    preg = (42.8, 10.7, 23.0)
+    non_preg = (32.1, 10.6, 11.6)
 
     ind = np.arange(N) + .15 # the x locations for the groups
     width = 0.35       # the width of the bars
@@ -163,7 +163,7 @@ def outcomes_pregnant_histogram():
     """
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
-    values = [np.array([10.5, 2.9, 1.5]), np.array([9.1, 2.3, 0]), np.array([19.4, 6.5, 4.2]), np.array([58.5,0,14.1]), np.array([0,0,23.0])]
+    values = [np.array([10.5, 2.9, 1.5]), np.array([9.1, 2.3, 1.2]), np.array([19.4, 6.5, 4.2]), np.array([58.5,0,14.1]), np.array([42.8,19.7,23.0])]
     n = len(values)                # Number of bars to plot
     w = 0.15                        # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
@@ -184,7 +184,7 @@ def outcomes_pregnant_histogram():
 def outcomes_non_pregnant_histogram():
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
-    values = [np.array([3.9, 1.1, 1.2]), np.array([3.5, 0.9, 0]), np.array([6.4,1.8,2.3]), np.array([44.8,0,12.7]), np.array([0,0,11.6])]
+    values = [np.array([3.9, 1.1, 1.2]), np.array([3.5, 0.9, 0.9]), np.array([6.4,1.8,2.3]), np.array([44.8,16.0,12.7]), np.array([32.1,10.6,11.6])]
     n = len(values) # Number of bars to plot
     w = 0.15  # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
@@ -209,7 +209,7 @@ def RR():
     """
 
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
-    values = [np.array([3.0, 2.9, 1.7]), np.array([2.4, 2.5, 0]), np.array([3.2,3.6,2.0]), np.array([1.5,0,1.5]), np.array([0,0,2.2])]
+    values = [np.array([3.0, 2.9, 1.7]), np.array([2.4, 2.5, 1.2]), np.array([3.2,3.6,2.0]), np.array([1.5,1.7,1.5]), np.array([1.5,1.9,2.2])]
     n = len(values)                # Number of bars to plot
     w = .15                        # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
@@ -234,7 +234,7 @@ def OR():
     """
 
     outcomes = ["Severe disease","ICU Admission", "Invasive Ventilation","Maternal Death"]
-    values = [np.array([1.83, 2.11, 0,0]), np.array([2.37,2.71,6.61,2.27]), np.array([1.81,1.70,5.26,0]), np.array([2.00,4.72,68.82,4.25]), np.array([2.12,4.67,0,14.88])]
+    values = [np.array([1.83, 2.11, 1.72,0.91]), np.array([2.37,2.71,6.61,2.27]), np.array([1.81,1.70,5.26,2.53]), np.array([2.0,4.72,68.82,4.25]), np.array([2.12,4.67,14.88,18.61])]
     n = len(values)                # Number of bars to plot
     w = .15                        # With of each column
     x = np.arange(0, len(outcomes))   # Center position of group on x axis
