@@ -89,7 +89,7 @@ def VAERS_data():
 
 if __name__ == "__main__":
     data, symptoms, vax = VAERS_data()
-    print(len(data)) # 199157
+    print(len(data)) # 199157 for 2021, 7937 for 2020
     #print(data.head())
     symptoms_tot = pd.concat([symptoms.SYMPTOM1, symptoms.SYMPTOM2, symptoms.SYMPTOM3, symptoms.SYMPTOM4, symptoms.SYMPTOM5])
     #print(symptoms_tot.nunique()) # number of unique symptoms=4235, length of all symptom entries is 240550
