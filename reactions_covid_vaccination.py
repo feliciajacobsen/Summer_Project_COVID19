@@ -19,21 +19,19 @@ def reactions_pregnant_moderna_pfizer():
     dose_1 = dose_1/np.sum(dose_1)
     dose_2 = dose_2/np.sum(dose_2)
 
-    ind = np.arange(N) + 0.35  # The x locations for the groups
+    ind = np.arange(N) + 0.15  # The x locations for the groups
     width = 0.35  # The width of the bars
     xtra_space = 0.05 # Extra space between each pair of chart
 
-    fig, (ax1, ax2) = plt.subplots(2, sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2)
 
     rects1 = ax1.bar(ind, dose_1, width, color="#2ca02c")
     rects2 = ax1.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
 
-    # add some text for labels, title and axes ticks
-    ax1.set_ylabel("%")
+    # add title
     ax1.set_title(
         "Reactons from vaccinated pregnant women with Pfizer/BioTech COVID-19", size=8
     )
-    ax1.legend(["Dose 1", "Dose 2"], fontsize=8)
 
     # Moderna
     # Counts
@@ -43,35 +41,37 @@ def reactions_pregnant_moderna_pfizer():
     dose_1 = dose_1/np.sum(dose_1)
     dose_2 = dose_2/np.sum(dose_2)
 
-
     rects1 = ax2.bar(ind, dose_1, width, color="#2ca02c")
     rects2 = ax2.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
 
-    ax2.set_ylabel("%")
     ax2.set_title(
         "Reactons from vaccinated pregnant women with Moderna COVID-19", size=8
     )
-    ax2.legend(["Dose 1", "Dose 2"], fontsize=8)
-    ax2.set_xticks(ind + 0.15 + xtra_space)
-    ax2.set_xticklabels(
-        (
-            "Injection-site pain",
-            "Fatigue",
-            "Headache",
-            "Myalgi",
-            "Chills",
-            "Fever/feverish",
-            r"Temperature $\geq$38°C",
-            "Nausea",
-            "Vomiting",
-            "Joint pain",
-            "Injection-site swelling",
-            "Abdonimal pain",
-            "Diarrhea",
-            "Rash",
-        ),
-        size=4,
-    )
+
+    # Adding some text for labels and axes ticks
+    for axes in [ax1, ax2]:
+        axes.set_ylabel("%")
+        axes.legend(["Dose 1", "Dose 2"], fontsize=8)
+        axes.set_xticks(ind + 0.15 + xtra_space)
+        axes.set_xticklabels(
+            (
+                "Injection-site pain",
+                "Fatigue",
+                "Headache",
+                "Myalgi",
+                "Chills",
+                "Fever/feverish",
+                r"Temperature $\geq$38°C",
+                "Nausea",
+                "Vomiting",
+                "Joint pain",
+                "Injection-site swelling",
+                "Abdonimal pain",
+                "Diarrhea",
+                "Rash",
+            ),
+            size=4,
+        )
 
     plt.show()
 
@@ -88,6 +88,12 @@ def reactions_pregnant_vs_non_pregnant():
 
     N = 9  # Total number of paired charts
 
+    ind = np.arange(N) + 0.35  # The x locations for the groups
+    width = 0.35  # The width of the bars
+    xtra_space = 0.05 # Extra space between each pair of chart
+
+    fig, (ax1,ax2) = plt.subplots(2)
+
     # Pfizer
     # Counts
     dose_1_preg = np.array([315, 140, 118, 92, 35, 43, 49, 32, 44])
@@ -97,22 +103,15 @@ def reactions_pregnant_vs_non_pregnant():
     dose_1_non_preg = dose_1_non_preg/np.sum(dose_1_non_preg)
 
 
-    ind = np.arange(N) + 0.35  # The x locations for the groups
-    width = 0.35  # The width of the bars
-    xtra_space = 0.05 # Extra space between each pair of chart
-
-    fig, (ax1,ax2) = plt.subplots(2, sharex=True)
-
     rects1 = ax1.bar(ind, dose_1_preg, width, color="#2ca02c")
     rects2 = ax1.bar(ind + width + xtra_space, dose_1_non_preg, width, color="#17becf")
 
     # add some text for labels, title and axes ticks
-    ax1.set_ylabel("%")
+
     ax1.set_title(
         "Reactons from pregnant and non-pregant women of ages 16-24 years vaccinated with 1st dose against COVID-19",
         size=8,
     )
-    ax1.legend(["Pregnant", "Non-pregnant"], fontsize=8)
 
     # Moderna
     dose_2_preg = np.array([208 ,176 ,137 ,133 ,88 ,94 ,81 ,67 ,41]) # Counts
@@ -124,27 +123,30 @@ def reactions_pregnant_vs_non_pregnant():
     rects1 = ax2.bar(ind, dose_2_preg, width, color="#2ca02c")
     rects2 = ax2.bar(ind + width + xtra_space, dose_2_non_preg, width, color="#17becf")
 
-    ax2.set_ylabel("%")
     ax2.set_title(
         "Reactons from pregnant and non-pregant women of ages 16-24 years vaccinated with 2nd dose against COVID-19",
         size=8,
     )
-    ax2.legend(["Pregnant", "Non-pregnant"], fontsize=8)
-    ax2.set_xticks(ind + 0.15 + xtra_space)
-    ax2.set_xticklabels(
-        (
-            "Injection-site pain",
-            "Fatigue",
-            "Headache",
-            "Myalgi",
-            "Chills",
-            "Fever/feverish",
-            "Nausea",
-            "Joint pain",
-            "Injection-site swelling",
-        ),
-        size=4,
-    )
+
+
+    for axes in [ax1, ax2]:
+        axes.legend(["Pregnant", "Non-pregnant"], fontsize=8)
+        axes.set_xticks(ind + 0.15 + xtra_space)
+        axes.set_ylabel("%")
+        axes.set_xticklabels(
+            (
+                "Injection-site pain",
+                "Fatigue",
+                "Headache",
+                "Myalgi",
+                "Chills",
+                "Fever/feverish",
+                "Nausea",
+                "Joint pain",
+                "Injection-site swelling",
+            ),
+            size=4,
+        )
 
     plt.show()
 
