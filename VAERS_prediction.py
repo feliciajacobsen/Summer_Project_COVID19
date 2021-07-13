@@ -20,13 +20,11 @@ def VAERS_data():
             "RPT_DATE",
             "SYMPTOM_TEXT",
             "DIED",
+            "HISTORY",
             "DATEDIED",
-            "L_THREAT",
             "ER_VISIT",
-            "HOSPITAL",
             "HOSPDAYS",
             "X_STAY",
-            "DISABLE",
             "RECOVD",
             "ONSET_DATE",
             "NUMDAYS",
@@ -35,19 +33,24 @@ def VAERS_data():
             "V_FUNDBY",
             "OTHER_MEDS",
             "CUR_ILL",
-            "HISTORY",
             "PRIOR_VAX",
             "SPLTTYPE",
             "FORM_VERS",
             "TODAYS_DATE",
-            "BIRTH_DEFECT",
             "OFC_VISIT",
             "ER_ED_VISIT",
             "ALLERGIES",
         ],
         axis=1,
     )
-    #print(len(patients)) #397444
+
+    # HOSPITAL = y or no values
+    # L_THREAT = y or no values
+    # HISTORY must be sorted or categorized in some way? physician-diagnosed
+        #   birth defects or medical condition that existedat the time of vaccination
+    # BIRTH_DEFECT = Y or no values
+    # DISABLE = y or no values
+    # skal vi ta med allergies?
 
     symptoms = pd.read_csv(
         data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
@@ -89,8 +92,7 @@ def VAERS_data():
 
 if __name__ == "__main__":
     data, symptoms, vax = VAERS_data()
-    print(len(data)) # 199157 for 2021, 7937 for 2020
-    #print(data.head())
+    #print(len(data)) # 199157 for 2021, 7937 for 2020
     symptoms_tot = pd.concat([symptoms.SYMPTOM1, symptoms.SYMPTOM2, symptoms.SYMPTOM3, symptoms.SYMPTOM4, symptoms.SYMPTOM5])
     #print(symptoms_tot.nunique()) # number of unique symptoms=4235, length of all symptom entries is 240550
     sorted = symptoms_tot.sort_values(ascending=True)
