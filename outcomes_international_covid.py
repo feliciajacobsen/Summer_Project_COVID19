@@ -10,19 +10,19 @@ The following data is collected from international studies.
 
 
 def overall_hist():
+    N = 3 # total number of paired charts
 
-    N = 3
-
-    preg = (10.5,2.9,1.5)
-    non_preg = (3.9,1.1,1.2)
+     # Counts per 1000 cases
+    preg = (10.5,2.9,1.5) # pregnant women
+    non_preg = (3.9,1.1,1.2) # non-pregnant women
 
     ind = np.arange(N) + .15 # the x locations for the groups
-    width = 0.35       # the width of the bars
+    width = 0.35  # the width of the bars
+    xtra_space = 0.05 # the extra space between each pair of charts
 
     fig, ax = plt.subplots()
     rects1 = ax.bar(ind, preg, width, color='#2ca02c')
 
-    xtra_space = 0.05
     rects2 = ax.bar(ind + width + xtra_space, non_preg, width, color='#17becf')
 
     # add some text for labels, title and axes ticks
@@ -38,20 +38,18 @@ def overall_hist():
 
 
 def age_25_34_hist():
-
-    N = 2
+    N = 2 # total number of paired charts
 
     preg = (9.1, 2.3)
     non_preg = (3.5, 0.9)
 
-
     ind = np.arange(N) + .15 # the x locations for the groups
-    width = 0.35       # the width of the bars
+    width = 0.35  # the width of the bars
+    xtra_space = 0.05 # the extra space between each pair of charts
 
     fig, ax = plt.subplots()
     rects1 = ax.bar(ind, preg, width, color='#2ca02c')
 
-    xtra_space = 0.05
     rects2 = ax.bar(ind + width + xtra_space, non_preg, width, color='#17becf')
 
     # add some text for labels, title and axes ticks
@@ -68,20 +66,18 @@ def age_25_34_hist():
 
 
 def age_35_44_hist():
-
-    N = 3
+    N = 3 # total number of paired charts
 
     preg = (19.4, 6.5, 4.2)
     non_preg = (6.4, 1.8, 2.3)
 
 
     ind = np.arange(N) + .15 # the x locations for the groups
-    width = 0.35       # the width of the bars
+    width = 0.35  # the width of the bars
+    xtra_space = 0.05 # the extra space between each pair of charts
 
     fig, ax = plt.subplots()
     rects1 = ax.bar(ind, preg, width, color='#2ca02c')
-
-    xtra_space = 0.05
     rects2 = ax.bar(ind + width + xtra_space, non_preg, width, color='#17becf')
 
     # add some text for labels, title and axes ticks
@@ -98,19 +94,17 @@ def age_35_44_hist():
 
 
 def diabetes_hist():
-    N = 3
+    N = 3 # total number of paired charts
 
     preg = (58.5, 23.4,14.1)
     non_preg = (44.8, 16.0, 12.7)
 
-
     ind = np.arange(N) + .15 # the x locations for the groups
-    width = 0.35       # the width of the bars
+    width = 0.35  # the width of the bars
+    xtra_space = 0.05 # the extra space between each pair of charts
 
     fig, ax = plt.subplots()
     rects1 = ax.bar(ind, preg, width, color='#2ca02c')
-
-    xtra_space = 0.05
     rects2 = ax.bar(ind + width + xtra_space, non_preg, width, color='#17becf')
 
     # add some text for labels, title and axes ticks
@@ -127,18 +121,17 @@ def diabetes_hist():
 
 
 def CVD_hist():
-    N = 3
+    N = 3 # total number of paired charts
 
     preg = (42.8, 10.7, 23.0)
     non_preg = (32.1, 10.6, 11.6)
 
     ind = np.arange(N) + .15 # the x locations for the groups
-    width = 0.35       # the width of the bars
+    width = 0.35  # the width of the bars
+    xtra_space = 0.05 # the extra space between each pair of charts
 
     fig, ax = plt.subplots()
     rects1 = ax.bar(ind, preg, width, color='#2ca02c')
-
-    xtra_space = 0.05
     rects2 = ax.bar(ind + width + xtra_space, non_preg, width, color='#17becf')
 
     # add some text for labels, title and axes ticks
@@ -293,8 +286,6 @@ def preg_women_hist():
     plt.ylabel("Odds ratio")
     plt.xlim([-0.5,0.5])
     plt.legend()
-
-
     plt.show()
 
 
