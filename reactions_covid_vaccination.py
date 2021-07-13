@@ -125,7 +125,7 @@ def data_agebands():
         [164883, 125443, 108313, 109791, 79522, 76909, 38210, 66102, 39962]
     )
 
-    return (
+    data_array = np.array((
         dose_1_preg_16_24,
         dose_1_non_preg_16_24,
         dose_2_preg_16_24,
@@ -141,8 +141,46 @@ def data_agebands():
         dose_1_preg_45_54,
         dose_1_non_preg_45_54,
         dose_2_preg_45_54,
-        dose_2_non_preg_45_54,
+        dose_2_non_preg_45_54))
+
+    """
+    Divide into each age band into numpy arrays containing pregant women with dose 1,
+    non-pregnant with dose 1, pregnant with dose 2, and non-pregnant with dose 2.
+    """
+    age_band_1 = np.array(
+        [
+            data_array[0] / np.sum(data_array[0]),
+            data_array[1] / np.sum(data_array[1]),
+            data_array[2] / np.sum(data_array[2]),
+            data_array[3] / np.sum(data_array[3]),
+        ]
     )
+    age_band_2 = np.array(
+        [
+            data_array[4] / np.sum(data_array[4]),
+            data_array[5] / np.sum(data_array[5]),
+            data_array[6] / np.sum(data_array[6]),
+            data_array[7] / np.sum(data_array[7]),
+        ]
+    )
+    age_band_3 = np.array(
+        [
+            data_array[8] / np.sum(data_array[8]),
+            data_array[9] / np.sum(data_array[9]),
+            data_array[10] / np.sum(data_array[10]),
+            data_array[11] / np.sum(data_array[11]),
+        ]
+    )
+    age_band_4 = np.array(
+        [
+            data_array[12] / np.sum(data_array[12]),
+            data_array[13] / np.sum(data_array[13]),
+            data_array[14] / np.sum(data_array[14]),
+            data_array[15] / np.sum(data_array[15]),
+        ]
+    )
+
+    return (age_band_1, age_band_2, age_band_3, age_band_4)
 
 
 def reactions_pregnant_vs_non_pregnant():
@@ -159,11 +197,7 @@ def reactions_pregnant_vs_non_pregnant():
     Age band 4 = 45-54 years.
     """
 
-    data_array = np.array(data_agebands())
-    age_band_1 = np.array([data_array[0]/np.sum(data_array[0]), data_array[1]/np.sum(data_array[1]), data_array[2]/np.sum(data_array[2]), data_array[3]/np.sum(data_array[3])])
-    age_band_2 = np.array([data_array[4]/np.sum(data_array[4]), data_array[5]/np.sum(data_array[5]), data_array[6]/np.sum(data_array[6]), data_array[7]/np.sum(data_array[7])])
-    age_band_3 = np.array([data_array[8]/np.sum(data_array[8]), data_array[9]/np.sum(data_array[9]), data_array[10]/np.sum(data_array[10]), data_array[11]/np.sum(data_array[11])])
-    age_band_4 = np.array([data_array[12]/np.sum(data_array[12]), data_array[13]/np.sum(data_array[13]), data_array[14]/np.sum(data_array[14]), data_array[15]/np.sum(data_array[15])])
+    age_band_1, age_band_2, age_band_3, age_band_4 = data_agebands()
 
     N = 9  # Total number of paired charts
 
@@ -171,9 +205,11 @@ def reactions_pregnant_vs_non_pregnant():
     width = 0.35  # The width of the bars
     xtra_space = 0.05  # Extra space between each pair of chart
 
-    age_band_title = ["16-24","25-34","35-44","45-54"]
+    age_band_title = ["16-24", "25-34", "35-44", "45-54"]
 
-    for i, title, age_band in zip(range(4), age_band_title, [age_band_1, age_band_2, age_band_3, age_band_4]):
+    for i, title, age_band in zip(
+        range(4), age_band_title, [age_band_1, age_band_2, age_band_3, age_band_4]
+    ):
         # Plotting for each ageband
         fig, (ax1, ax2) = plt.subplots(2)
 
@@ -181,7 +217,9 @@ def reactions_pregnant_vs_non_pregnant():
         rects2 = ax1.bar(ind + width + xtra_space, age_band[1], width, color="#17becf")
 
         ax1.set_title(
-            "Reactons from pregnant and non-pregant women of ages "+title+ " years vaccinated with 1st dose against COVID-19",
+            "Reactons from pregnant and non-pregant women of ages "
+            + title
+            + " years vaccinated with 1st dose against COVID-19",
             size=8,
         )
 
@@ -189,7 +227,9 @@ def reactions_pregnant_vs_non_pregnant():
         rects2 = ax2.bar(ind + width + xtra_space, age_band[3], width, color="#17becf")
 
         ax2.set_title(
-            "Reactons from pregnant and non-pregant women of ages "+title+ " years vaccinated with 2nd dose against COVID-19",
+            "Reactons from pregnant and non-pregant women of ages "
+            + title
+            + " years vaccinated with 2nd dose against COVID-19",
             size=8,
         )
 
