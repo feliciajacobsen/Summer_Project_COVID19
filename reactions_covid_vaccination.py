@@ -145,34 +145,34 @@ def data_agebands():
     """
     age_band_1 = np.array(
         [
-            data_array[0] / np.sum(data_array[0]),
-            data_array[1] / np.sum(data_array[1]),
-            data_array[2] / np.sum(data_array[2]),
-            data_array[3] / np.sum(data_array[3]),
+            data_array[0] / 391.,
+            data_array[1] / 92194,
+            data_array[2] / 233.,
+            data_array[3] / 47345.,
         ]
     )
     age_band_2 = np.array(
         [
-            data_array[4] / np.sum(data_array[4]),
-            data_array[5] / np.sum(data_array[5]),
-            data_array[6] / np.sum(data_array[6]),
-            data_array[7] / np.sum(data_array[7]),
+            data_array[4] / 10947.,
+            data_array[5] / 272421.,
+            data_array[6] / 8060.,
+            data_array[7] / 172245.,
         ]
     )
     age_band_3 = np.array(
         [
-            data_array[8] / np.sum(data_array[8]),
-            data_array[9] / np.sum(data_array[9]),
-            data_array[10] / np.sum(data_array[10]),
-            data_array[11] / np.sum(data_array[11]),
+            data_array[8] / 5288.,
+            data_array[9] / 323015.,
+            data_array[10] / 3704.,
+            data_array[11] / 209052.,
         ]
     )
     age_band_4 = np.array(
         [
-            data_array[12] / np.sum(data_array[12]),
-            data_array[13] / np.sum(data_array[13]),
-            data_array[14] / np.sum(data_array[14]),
-            data_array[15] / np.sum(data_array[15]),
+            data_array[12] / 356.,
+            data_array[13] / 321972.,
+            data_array[14] / 278.,
+            data_array[15] / 194989.,
         ]
     )
 

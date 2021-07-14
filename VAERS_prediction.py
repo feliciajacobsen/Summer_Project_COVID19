@@ -15,6 +15,8 @@ def VAERS_data():
     )
     patients = patients.drop(
         [
+            "RECVDATE",
+            "VAX_DATE"
             "CAGE_YR",
             "CAGE_MO",
             "RPT_DATE",
@@ -42,17 +44,24 @@ def VAERS_data():
         axis=1,
     )
 
-    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="None"] = 0
-    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="Unknown"] = 0
-    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="Na"] = 0
-    patients.OTHER_MEDS.loc[patients.OTHER_MEDS.notnull()] = 1  # not nan
-    patients.OTHER_MEDS.loc[patients.OTHER_MEDS.isnull()] = 0   # nan
+    # One-hot-encoding: yes = 1, no = 0
+    patients.OTHER_MEDS[patients.OTHER_MEDS=="None"] = 0
+    patients.OTHER_MEDS[patients.OTHER_MEDS=="Unknown"] = 0
+    patients.OTHER_MEDS[patients.OTHER_MEDS=="Na"] = 0
+    patients.OTHER_MEDS[patients.OTHER_MEDS.notnull()] = 1  # not nan
+    patients.OTHER_MEDS[patients.OTHER_MEDS.isnull()] = 0   # nan
 
-    # HOSPITAL = y or no values
-    # L_THREAT = y or no values
-    # HISTORY drop this because of ustructured data
-    # BIRTH_DEFECT = Y or no value
-    # DISABLE = y or no values
+    patients.HOSPITAL[patients.HOSPITAL=="Y"] = 1
+    patients.HOSPITAL[patients.HOSPITAL!=1] = 0
+
+    patients.L_THREAT[patients.L_THREAT=="Y"] = 1
+    patients.L_THREAT[patients.L_THREAT!=1] = 0
+
+    patients.BIRTH_DEFECT[patients.BIRTH_DEFECT=="Y"] = 1
+    patients.BIRTH_DEFECT[patients.BIRTH_DEFECT!=1] = 0
+
+    patients.DISABLE[patients.DISABLE=="Y"] = 1
+    patients.DISABLE[patients.DISABLE!=1] = 0
 
 
     symptoms = pd.read_csv(
@@ -101,4 +110,3 @@ if __name__ == "__main__":
     sorted = symptoms_tot.sort_values(ascending=True)
     unique_sorted_symptoms_tot = sorted.drop_duplicates()
     #unique_sorted_symptoms_tot.to_csv('list_of_unique_symptoms_covid19.csv')
-    print(data.OTHER_MEDS)
