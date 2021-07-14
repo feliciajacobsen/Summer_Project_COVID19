@@ -172,13 +172,8 @@ def outcomes_pregnant_vs_nonpregnant_histogram():
     plt.legend(fontsize=8)
 
     plt.subplot(212)
-    outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
     values = [np.array([3.9, 1.1, 1.2]), np.array([3.5, 0.9, 0.9]), np.array([6.4,1.8,2.3]), np.array([44.8,16.0,12.7]), np.array([32.1,10.6,11.6])]
-    n = len(values) # Number of bars to plot
-    w = 0.15  # With of each column
-    x = np.arange(0, len(outcomes))   # Center position of group on x axis
-    labels = ["Overall", "Age 25-34", "Age 35-44", "Underlying diabetes", "Underlying CVD"]
     for i, value, label in zip(range(5), values, labels):
         position = x + (w*(1-n)/2) + i*w
         plt.bar(position, value, width=w, label=label)
@@ -225,7 +220,7 @@ def OR():
     The following histogram visualizes the odds ratio of maternal risk factors
     associated with severe SARS-CoV-2.
     """
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(7,7))
     outcomes = ["Severe disease","ICU Admission", "Invasive Ventilation","Maternal Death"]
     values = [np.array([1.83, 2.11, 1.72,0.91]), np.array([2.37,2.71,6.61,2.27]), np.array([1.81,1.70,5.26,2.53]), np.array([2.0,4.72,68.82,4.25]), np.array([2.12,4.67,18.61,14.88])]
     # 95% confidence interval

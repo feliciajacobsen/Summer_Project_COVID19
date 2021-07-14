@@ -15,15 +15,15 @@ def reactions_pregnant_moderna_pfizer():
     width = 0.35  # The width of the bars
     xtra_space = 0.05  # Extra space between each pair of chart
 
-    fig, (ax1, ax2) = plt.subplots(2)
+    fig, (ax1, ax2) = plt.subplots(2, figsize=(12,8))
 
     # Pfizer
     # Counts
     dose_1 = np.array(
-        [7602, 2406, 1497, 795, 254, 256, 30, 492, 82, 209, 318, 117, 178, 20]
+        [7602, 2406, 1497, 795, 254, 256, 30, 492, 82, 209, 117, 178, 20, 318]
     )
     dose_2 = np.array(
-        [5886, 4231, 3138, 2916, 1747, 1648, 315, 1356, 201, 1267, 411, 316, 277, 18]
+        [5886, 4231, 3138, 2916, 1747, 1648, 315, 1356, 201, 1267, 316, 277, 18, 411]
     )
     # Percentages
     dose_1 = dose_1 / np.sum(dose_1)
@@ -40,10 +40,10 @@ def reactions_pregnant_moderna_pfizer():
     # Moderna
     # Counts
     dose_1 = np.array(
-        [7360, 2616, 1581, 1167, 442, 453, 62, 638, 77, 342, 739, 160, 189, 22]
+        [7360, 2616, 1581, 1167, 442, 453, 62, 638, 77, 342, 160, 189, 22, 739]
     )
     dose_2 = np.array(
-        [5388, 4541, 3662, 3722, 2755, 2594, 664, 1909, 357, 1871, 1051, 401, 332, 18]
+        [5388, 4541, 3662, 3722, 2755, 2594, 664, 1909, 357, 1871, 401, 332, 18, 1051]
     )
     # Percentages
     dose_1 = dose_1 / np.sum(dose_1)
@@ -73,12 +73,12 @@ def reactions_pregnant_moderna_pfizer():
                 "Nausea",
                 "Vomiting",
                 "Joint pain",
-                "Injection-site swelling",
                 "Abdonimal pain",
                 "Diarrhea",
                 "Rash",
+                "Injection-site swelling",
             ),
-            size=4,
+            size=5,
         )
 
     plt.show()
@@ -211,7 +211,7 @@ def reactions_pregnant_vs_non_pregnant():
         range(4), age_band_title, [age_band_1, age_band_2, age_band_3, age_band_4]
     ):
         # Plotting for each ageband
-        fig, (ax1, ax2) = plt.subplots(2)
+        fig, (ax1, ax2) = plt.subplots(2, figsize=(12, 8))
 
         rects1 = ax1.bar(ind, age_band[0], width, color="#2ca02c")
         rects2 = ax1.bar(ind + width + xtra_space, age_band[1], width, color="#17becf")
@@ -249,7 +249,7 @@ def reactions_pregnant_vs_non_pregnant():
                     "Joint pain",
                     "Injection-site swelling",
                 ),
-                size=4,
+                size=6,
             )
 
         plt.show()

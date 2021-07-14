@@ -17,7 +17,7 @@ def maternal_risk_vaccinated_unvaccinated():
     non_vacc = (10.5)
     ind = np.arange(1) + .15 # the x locations for the groups
     width = 0.35       # the width of the bars
-    fig, axs = plt.subplots(2,2)
+    fig, axs = plt.subplots(2,2, figsize=(7,7))
     rects1 = axs[0,0].bar(ind, vacc, width, color='#2ca02c')
     xtra_space = 0.05
     rects2 = axs[0,0].bar(ind + width + xtra_space, non_vacc, width, color='#17becf')

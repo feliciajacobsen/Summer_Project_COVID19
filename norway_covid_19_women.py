@@ -15,7 +15,7 @@ def cases_vs_vaccinated_hist():
 
     ind = np.arange(4) # the x locations for the groups
     width = 0.3       # the width of the bars
-    fig, (ax1, ax2) = plt.subplots(2)
+    fig, (ax1, ax2) = plt.subplots(2, figsize=(7,7))
     rects2 = ax1.bar(ind + width, vaccinated, width, color='#1f77b4')
     # add some text for labels, title and axes ticks
     ax1.set_ylabel("Count per 100 000")
@@ -31,7 +31,6 @@ def cases_vs_vaccinated_hist():
     ax2.set_title("Number of norwegian women with covid-19 of different age groups", size=10)
     ax2.set_xticks(ind+width)
     ax2.set_xticklabels(("10-19","20-29","30-39","40-49"), fontsize=8)
-
 
     plt.show()
 
