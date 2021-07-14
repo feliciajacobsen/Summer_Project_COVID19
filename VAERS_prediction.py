@@ -14,7 +14,6 @@ def VAERS_data():
     )
     patients = patients.drop(
         [
-            "RECVDATE",
             "CAGE_YR",
             "CAGE_MO",
             "RPT_DATE",

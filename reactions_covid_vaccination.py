@@ -18,16 +18,14 @@ def reactions_pregnant_moderna_pfizer():
     fig, (ax1, ax2) = plt.subplots(2, figsize=(12,8))
 
     # Pfizer
-    # Counts
+    # Percentages
     dose_1 = np.array(
         [7602, 2406, 1497, 795, 254, 256, 30, 492, 82, 209, 117, 178, 20, 318]
-    )
+    )/9052.
     dose_2 = np.array(
         [5886, 4231, 3138, 2916, 1747, 1648, 315, 1356, 201, 1267, 316, 277, 18, 411]
-    )
-    # Percentages
-    dose_1 = dose_1 / np.sum(dose_1)
-    dose_2 = dose_2 / np.sum(dose_2)
+    )/6638.
+
 
     rects1 = ax1.bar(ind, dose_1, width, color="#2ca02c")
     rects2 = ax1.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
@@ -38,16 +36,14 @@ def reactions_pregnant_moderna_pfizer():
     )
 
     # Moderna
-    # Counts
+    # Percentages
     dose_1 = np.array(
         [7360, 2616, 1581, 1167, 442, 453, 62, 638, 77, 342, 160, 189, 22, 739]
-    )
+    )/7930.
     dose_2 = np.array(
         [5388, 4541, 3662, 3722, 2755, 2594, 664, 1909, 357, 1871, 401, 332, 18, 1051]
-    )
-    # Percentages
-    dose_1 = dose_1 / np.sum(dose_1)
-    dose_2 = dose_2 / np.sum(dose_2)
+    )/5635.
+
 
     rects1 = ax2.bar(ind, dose_1, width, color="#2ca02c")
     rects2 = ax2.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
@@ -144,7 +140,7 @@ def data_agebands():
         dose_2_non_preg_45_54))
 
     """
-    Divide into each age band into numpy arrays containing pregant women with dose 1,
+    Divide into each age band into numpy arrays containing pregnant women with dose 1,
     non-pregnant with dose 1, pregnant with dose 2, and non-pregnant with dose 2.
     """
     age_band_1 = np.array(
