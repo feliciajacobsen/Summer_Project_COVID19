@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from pathlib import Path
+pd.options.mode.chained_assignment = None
 
 
 def VAERS_data():
@@ -30,8 +31,6 @@ def VAERS_data():
             "LAB_DATA",
             "V_ADMINBY",
             "V_FUNDBY",
-            "OTHER_MEDS",
-            "CUR_ILL",
             "PRIOR_VAX",
             "SPLTTYPE",
             "FORM_VERS",
@@ -43,13 +42,18 @@ def VAERS_data():
         axis=1,
     )
 
+    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="None"] = 0
+    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="Unknown"] = 0
+    patients.OTHER_MEDS.loc[patients.OTHER_MEDS=="Na"] = 0
+    patients.OTHER_MEDS.loc[patients.OTHER_MEDS.notnull()] = 1  # not nan
+    patients.OTHER_MEDS.loc[patients.OTHER_MEDS.isnull()] = 0   # nan
+
     # HOSPITAL = y or no values
     # L_THREAT = y or no values
-    # HISTORY must be sorted or categorized in some way? physician-diagnosed
-        #   birth defects or medical condition that existedat the time of vaccination
-    # BIRTH_DEFECT = Y or no values
+    # HISTORY drop this because of ustructured data
+    # BIRTH_DEFECT = Y or no value
     # DISABLE = y or no values
-    # skal vi ta med allergies?
+
 
     symptoms = pd.read_csv(
         data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
@@ -97,3 +101,4 @@ if __name__ == "__main__":
     sorted = symptoms_tot.sort_values(ascending=True)
     unique_sorted_symptoms_tot = sorted.drop_duplicates()
     #unique_sorted_symptoms_tot.to_csv('list_of_unique_symptoms_covid19.csv')
+    print(data.OTHER_MEDS)
