@@ -118,9 +118,13 @@ def read_and_preprocess_VAERS_data():
     # removing "\n"-character from list
     symptom_columns = [x.strip() for x in symptom_columns]
 
+    # making empty dataframe of symptoms
     symptoms_df = pd.DataFrame(data=np.zeros((len(fertile_females), len(symptom_columns))), columns=symptom_columns)
+
+    # concatenating patient info and symptoms of interest
     fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
 
+    # one-hot encode the symptoms of interest and remove the rest
     for i, id in enumerate(fertile_females.VAERS_ID):
         # all reports of fertile females vaccinated from covid-19
         reports = symptoms[symptoms.VAERS_ID == id]
@@ -130,10 +134,8 @@ def read_and_preprocess_VAERS_data():
                 if symptom in fertile_females:
                     fertile_females[fertile_females.VAERS_ID == id][symptom] = 1.0
 
-        if i > 100:
-            break
 
-    print(fertile_females)
+    return fertile_females
 
 
 
