@@ -1,0 +1,115 @@
+Bradycardia
+Bradycardia foetal
+Brachiocephalic vein thrombosis
+Brachial plexus injury
+Brachial artery entrapment syndrome
+Postural orthostatic tachycardia syndrome
+Sinus tachycardia
+Sinus node dysfunction
+Sinus headache
+Sinus arrest
+Sinus arrhythmia
+Sinus bradycardia
+Sinus congestion
+Sinus disorder
+Sinus operation
+Sinus pain
+Sinus rhythm
+Supraventricular tachycardia
+Tachyarrhythmia
+Tachycardia
+Tachycardia foetal
+Tachyphrenia
+Atrial tachycardia
+Atrioventricular block
+Atrioventricular block complete
+Atrioventricular block first degree
+Atrioventricular block second degree
+Pericarditis
+Pericardial cyst
+Pericardial drainage
+Pericardial effusion
+Agonal rhythm
+Angina pectoris
+Angina unstable
+Aortic valve stenosis
+Aortitis
+Arrhythmia
+Arrhythmia supraventricular
+Arterial stenosis
+Atrial enlargement
+Atrial fibrillation
+Atrial flutter
+Atrial septal defect
+Atrial tachycardia
+Atrioventricular block
+Atrioventricular block first degree
+Atrioventricular block second degree
+Atrophy
+Cardiac arrest
+Cardiac ablation
+Cardiac death
+Cardiac discomfort
+Cardiac failure
+Cardiac disorder
+Cardiac failure acute
+Cardiac failure chronic
+Cardiac failure congestive
+Cardiac fibrillation
+Cardiac flutter
+Cardiac monitoring abnormal
+Cardiac imaging procedure abnormal
+Cardiac septal hypertrophy
+Cardiac perfusion defect
+Cardiac tamponade
+Cardiac telemetry abnormal
+Cardio-respiratory arrest
+Cardio-respiratory distress
+Cardiogenic shock
+Cardiomegaly
+Cardiovascular disorder
+Cardiovascular evaluation
+Cardiomyopathy
+Chronic left ventricular failure
+Coronary artery disease
+Coronary artery occlusion
+Coronary artery dissection
+Coronary artery thrombosis
+Ejection fraction abnormal
+Ejection fraction decreased
+Electrocardiogram ambulatory abnormal
+Heart injury
+Heart rate abnormal
+Heart rate increased
+Heart rate decreased
+Heart rate irregular
+Heart sounds abnormal
+Heart valve incompetence
+Left ventricular end-diastolic pressure increased
+Left ventricular dysfunction
+Left ventricular dilatation
+Left atrial enlargement
+Left atrial dilatation
+Microvascular coronary artery disease
+Right ventricular failure
+Right ventricular hypertrophy
+Right ventricular enlargement
+Right ventricular ejection fraction decreased
+Right ventricular dysfunction
+Right ventricular dilatation
+Right atrial dilatation
+Right ventricular systolic pressure
+Right ventricular systolic pressure decreased
+Heavy menstrual bleeding
+Intermenstrual bleeding
+Menstrual disorder
+Menorrhagia
+Menstruation delayed
+Menstruation irregular
+Premenstrual syndrome
+Breast discomfort
+Breast pain
+Breast swelling
+Breast tenderness
+Amenorrhoea
+Genital pain

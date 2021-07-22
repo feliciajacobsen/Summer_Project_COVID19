@@ -6,7 +6,7 @@ from pathlib import Path
 pd.options.mode.chained_assignment = None
 
 
-def VAERS_data():
+def read_and_preprocess_VAERS_data():
     data_path_2021 = Path("./data/2021VAERSData")
 
 
@@ -16,7 +16,8 @@ def VAERS_data():
     patients = patients.drop(
         [
             "RECVDATE",
-            "VAX_DATE"
+            "STATE",
+            "VAX_DATE",
             "CAGE_YR",
             "CAGE_MO",
             "RPT_DATE",
@@ -50,6 +51,12 @@ def VAERS_data():
     patients.OTHER_MEDS[patients.OTHER_MEDS=="Na"] = 0
     patients.OTHER_MEDS[patients.OTHER_MEDS.notnull()] = 1  # not nan
     patients.OTHER_MEDS[patients.OTHER_MEDS.isnull()] = 0   # nan
+
+    patients.CUR_ILL[patients.CUR_ILL=="None"] = 0
+    patients.CUR_ILL[patients.CUR_ILL=="Unknown"] = 0
+    patients.CUR_ILL[patients.CUR_ILL=="Na"] = 0
+    patients.CUR_ILL[patients.CUR_ILL.notnull()] = 1  # not nan
+    patients.CUR_ILL[patients.CUR_ILL.isnull()] = 0   # nan
 
     patients.HOSPITAL[patients.HOSPITAL=="Y"] = 1
     patients.HOSPITAL[patients.HOSPITAL!=1] = 0
@@ -85,28 +92,58 @@ def VAERS_data():
 
     vax = vax.drop(["VAX_LOT", "VAX_ROUTE", "VAX_SITE", "VAX_NAME"], axis=1)
 
-    patients_symptoms = pd.merge(patients, symptoms, on="VAERS_ID")
-    data = pd.merge(patients_symptoms, vax, on="VAERS_ID")
+    patients_vax = pd.merge(patients, vax, on="VAERS_ID")
 
     # defines new data frame with removed men
-    data_females = data[data.SEX == "F"]
-    data_females = data_females[data_females.VAX_TYPE == "COVID19"]
-    data_females = data_females.drop(["VAX_TYPE", "SEX"], axis=1)
+    females = patients_vax[patients_vax.SEX == "F"]
+
+    # only include data from covid-19 vaccine
+    females = females[females.VAX_TYPE == "COVID19"]
+
+    # remove columns of sex (only females), vaccine type (only covid19) and state (uninteresting for now)
+    females = females.drop(["VAX_TYPE", "SEX"], axis=1)
 
     # making data frame including only fertile women
-    data_fertile_females = data_females[
-        (data_females.AGE_YRS >= 15.0) & (data_females.AGE_YRS <= 50.0)
+    fertile_females = females[
+        (females.AGE_YRS >= 15.0) & (females.AGE_YRS <= 50.0)
     ]
 
+    fertile_females.reset_index(drop=True, inplace=True)
 
-    return data_fertile_females, symptoms, vax
+    # list of heart- and hormone-related symptoms (defined in separate .txt-file)
+    with open("symptoms.txt", "r") as infile:
+        symptom_columns = infile.readlines()
+        infile.close()
+
+    # removing "\n"-character from list
+    symptom_columns = [x.strip() for x in symptom_columns]
+
+    symptoms_df = pd.DataFrame(data=np.zeros((len(fertile_females), len(symptom_columns))), columns=symptom_columns)
+    fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
+
+    for i, id in enumerate(fertile_females.VAERS_ID):
+        # all reports of fertile females vaccinated from covid-19
+        reports = symptoms[symptoms.VAERS_ID == id]
+        for index, report in reports.iterrows():
+            for symptom_number in ["SYMPTOM1","SYMPTOM2","SYMPTOM3","SYMPTOM4","SYMPTOM5"]:
+                symptom = report[symptom_number]
+                if symptom in fertile_females:
+                    fertile_females[fertile_females.VAERS_ID == id][symptom] = 1.0
+
+        if i > 100:
+            break
+
+    print(fertile_females)
+
 
 
 if __name__ == "__main__":
-    data, symptoms, vax = VAERS_data()
+    # When I need to preprocess new data
+    data = read_and_preprocess_VAERS_data()
+    #save_preprocessed_data() # 5 sek
+
+    # When I can re-use the already preprocessed data
+    #load_preprocessed_data() # 5 sek
+
+    #run_ml_model()
     #print(len(data)) # 199157 for 2021, 7937 for 2020
-    symptoms_tot = pd.concat([symptoms.SYMPTOM1, symptoms.SYMPTOM2, symptoms.SYMPTOM3, symptoms.SYMPTOM4, symptoms.SYMPTOM5])
-    #print(symptoms_tot.nunique()) # number of unique symptoms=4235, length of all symptom entries is 240550
-    sorted = symptoms_tot.sort_values(ascending=True)
-    unique_sorted_symptoms_tot = sorted.drop_duplicates()
-    #unique_sorted_symptoms_tot.to_csv('list_of_unique_symptoms_covid19.csv')
