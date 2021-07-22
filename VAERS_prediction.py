@@ -7,12 +7,57 @@ pd.options.mode.chained_assignment = None
 
 
 def read_and_preprocess_VAERS_data():
+    """
+    Function reads VAERS data from 2020 and later, and drops columns
+    which is not suitable for prediction. Data is one-hot encoded where
+    only 115 symptoms of interest are kept in the data.
+
+    The symptoms of interest are:
+        - heart-related and hormone-related symptoms.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        X: pandas DataFrame
+            Covid-19 vaccinated patient data.
+        y: pandas DataFrame
+            one-hot encoded labels of symptoms of interest.
+    """
+    # define data paths for each year
     data_path_2021 = Path("./data/2021VAERSData")
+    data_path_2020 = Path("./data/2020VAERSData")
 
-
-    patients = pd.read_csv(
-        data_path_2021 / "2021VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
+    # read data files
+    patients_2021 = pd.read_csv(
+    data_path_2021 / "2021VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
     )
+    patients_2020 = pd.read_csv(
+
+    data_path_2020 / "2020VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
+    )
+    symptoms_2020 = pd.read_csv(
+        data_path_2020 / "2020VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
+    )
+    symptoms_2021 = pd.read_csv(
+        data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
+    )
+
+    vax_2020 = pd.read_csv(
+        data_path_2020 / "2020VAERSVAX.csv", encoding="ISO-8859-1", low_memory=False
+    )
+    vax_2021 = pd.read_csv(
+        data_path_2021 / "2021VAERSVAX.csv", encoding="ISO-8859-1", low_memory=False
+    )
+
+    # concatenate data from each year
+    patients = pd.concat([patients_2020, patients_2021], axis=0)
+    symptoms = pd.concat([symptoms_2020, symptoms_2021], axis=0)
+    vax = pd.concat([vax_2020, vax_2021], axis=0)
+
+    # drop columns from each dataframe which is not of interest
     patients = patients.drop(
         [
             "RECVDATE",
@@ -70,11 +115,7 @@ def read_and_preprocess_VAERS_data():
     patients.DISABLE[patients.DISABLE=="Y"] = 1
     patients.DISABLE[patients.DISABLE!=1] = 0
 
-
-    symptoms = pd.read_csv(
-        data_path_2021 / "2021VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
-    )
-
+    # drop columns which is not of interest
     symptoms = symptoms.drop(
         [
             "SYMPTOMVERSION1",
@@ -86,12 +127,10 @@ def read_and_preprocess_VAERS_data():
         axis=1,
     )
 
-    vax = pd.read_csv(
-        data_path_2021 / "2021VAERSVAX.csv", encoding="ISO-8859-1", low_memory=False
-    )
-
+    # drop columns which is not of interest
     vax = vax.drop(["VAX_LOT", "VAX_ROUTE", "VAX_SITE", "VAX_NAME"], axis=1)
 
+    # merge patients and vaccine data depending on ID no.
     patients_vax = pd.merge(patients, vax, on="VAERS_ID")
 
     # defines new data frame with removed men
@@ -118,6 +157,8 @@ def read_and_preprocess_VAERS_data():
     # removing "\n"-character from list
     symptom_columns = [x.strip() for x in symptom_columns]
 
+    #print(len(symptom_columns)) # 115 symptoms of interest in total
+
     # making empty dataframe of symptoms
     symptoms_df = pd.DataFrame(data=np.zeros((len(fertile_females), len(symptom_columns))), columns=symptom_columns)
 
@@ -135,8 +176,7 @@ def read_and_preprocess_VAERS_data():
                     fertile_females[fertile_females.VAERS_ID == id][symptom] = 1.0
 
 
-    return fertile_females
-
+    return fertile_females.iloc[:,:-len(symptom_columns)], fertile_females.iloc[:,-len(symptom_columns):]
 
 
 if __name__ == "__main__":
