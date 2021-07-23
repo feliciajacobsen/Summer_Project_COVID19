@@ -38,6 +38,11 @@ def overall_hist():
 
 
 def age_25_34_hist():
+    """
+    The following histogram visualizes the distibution of various outcomes
+    associated with covid-19 infection between pregnant and non-pregnant women
+    in the age group of 25 to 34 years of age.
+    """
     N = 2 # total number of paired charts
 
     preg = (9.1, 2.3)
@@ -66,6 +71,11 @@ def age_25_34_hist():
 
 
 def age_35_44_hist():
+    """
+    The following histogram visualizes the distibution of various outcomes
+    associated with covid-19 infection between pregnant and non-pregnant women
+    in the age group of 35 to 44 years of age.
+    """
     N = 3 # total number of paired charts
 
     preg = (19.4, 6.5, 4.2)
@@ -94,6 +104,11 @@ def age_35_44_hist():
 
 
 def diabetes_hist():
+    """
+    The following histogram visualizes the distibution of various outcomes
+    associated with covid-19 infection between pregnant and non-pregnant women
+    with underlying diabetes.
+    """
     N = 3 # total number of paired charts
 
     preg = (58.5, 23.4,14.1)
@@ -121,6 +136,11 @@ def diabetes_hist():
 
 
 def CVD_hist():
+    """
+    The following histogram visualizes the distibution of various outcomes
+    associated with covid-19 infection between pregnant and non-pregnant women
+    with cardivascular disease (CVD)
+    """
     N = 3 # total number of paired charts
 
     preg = (42.8, 10.7, 23.0)
@@ -148,11 +168,11 @@ def CVD_hist():
 
 def outcomes_pregnant_vs_nonpregnant_histogram():
     """
-    The following histogram visualises the number of events per 1000 cases for
-    pregnant and non-pregnant women infected with SARS-CoV-2.
+    The following histogram visualises the number of events per 1000 cases of
+    outcomes associated with covid-19 infection between pregnant and non-pregnant.
 
-    The histogram visualises the number of events for each of the various outcomes of
-    the disease.
+    Each group of histogram is associated with a specific outcome, where each bin
+    in a group represent an age group or a group with underlying diabetes or CVD.
     """
     plt.subplot(211)
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
@@ -189,8 +209,8 @@ def outcomes_pregnant_vs_nonpregnant_histogram():
 
 def RR():
     """
-    The following histogram visualises the risk ratios of various outcomes in
-    pregnant women infected with SARS-CoV-2 and non-pregnant women with SARS-CoV-2.
+    The following histogram visualises the risk ratios of various outcomes between
+    pregnant women and non-pregnant women. Both groups are infected with SARS-CoV-2.
     """
 
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
@@ -217,8 +237,8 @@ def RR():
 
 def OR():
     """
-    The following histogram visualizes the odds ratio of maternal risk factors
-    associated with severe SARS-CoV-2.
+    The following histogram visualizes the odds ratio of various maternal risk factors
+    associated with severe SARS-CoV-2 infection.
     """
     fig, ax = plt.subplots(figsize=(7,7))
     outcomes = ["Severe disease","ICU Admission", "Invasive Ventilation","Maternal Death"]

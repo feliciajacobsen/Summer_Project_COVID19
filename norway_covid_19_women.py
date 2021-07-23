@@ -5,10 +5,18 @@ import matplotlib.pyplot as plt
 
 def cases_vs_vaccinated_hist():
     """
-    The following histograms visualises the distribution
-    between the number of vaccinated women in Norway of different age groups,
-    as well as a separate histogram for distribution of infected women in
-    different age groups.
+    The following function visualizes the data in terms of histograms. These
+    histograms visualises the distribution between the number of vaccinated
+    women in Norway of different age groups, as well as a separate histogram
+    for distribution of infected women in different age groups.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        None
     """
 
     vaccinated = (8052,55733,46864,75181)

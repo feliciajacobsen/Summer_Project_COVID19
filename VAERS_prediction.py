@@ -3,14 +3,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from pathlib import Path
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, accuracy_score
 pd.options.mode.chained_assignment = None
 
 
 def read_and_preprocess_VAERS_data():
     """
     Function reads VAERS data from 2020 and later, and drops columns
-    which is not suitable for prediction. Data is one-hot encoded where
-    only 115 symptoms of interest are kept in the data.
+    which is not suitable for prediction. All non-Covid-19 are omitted.
+    Data is one-hot encoded where only 115 symptoms of interest are kept
+    in the dataset.
 
     The symptoms of interest are:
         - heart-related and hormone-related symptoms.
@@ -36,7 +40,7 @@ def read_and_preprocess_VAERS_data():
     )
     patients_2020 = pd.read_csv(
 
-    data_path_2020 / "2020VAERSDATA.csv", encoding="ISO-8859-1", low_memory=False
+    data_path_2020 / "2020VAERSData.csv", encoding="ISO-8859-1", low_memory=False
     )
     symptoms_2020 = pd.read_csv(
         data_path_2020 / "2020VAERSSYMPTOMS.csv", encoding="ISO-8859-1", low_memory=False
@@ -130,7 +134,7 @@ def read_and_preprocess_VAERS_data():
     # drop columns which is not of interest
     vax = vax.drop(["VAX_LOT", "VAX_ROUTE", "VAX_SITE", "VAX_NAME"], axis=1)
 
-    # merge patients and vaccine data depending on ID no.
+    # merge patients and vaccine data depending on ID number
     patients_vax = pd.merge(patients, vax, on="VAERS_ID")
 
     # defines new data frame with removed men
@@ -166,6 +170,7 @@ def read_and_preprocess_VAERS_data():
     fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
 
     # one-hot encode the symptoms of interest and remove the rest
+    """
     for i, id in enumerate(fertile_females.VAERS_ID):
         # all reports of fertile females vaccinated from covid-19
         reports = symptoms[symptoms.VAERS_ID == id]
@@ -174,15 +179,47 @@ def read_and_preprocess_VAERS_data():
                 symptom = report[symptom_number]
                 if symptom in fertile_females:
                     fertile_females[fertile_females.VAERS_ID == id][symptom] = 1.0
+    """
+
+    for i, id in enumerate(fertile_females.VAERS_ID):
+        reports = symptoms[symptoms.VAERS_ID == id] # symptom reports must match with correct patient
+        # loop over each report for each patient
+        for index, report in reports.iterrows():
+            # loop over each symptom in a row
+            for symptom_number in ["SYMPTOM1","SYMPTOM2","SYMPTOM3","SYMPTOM4","SYMPTOM5"]:
+                symptom = report[symptom_number]
+                if symptom in symptom_columns:
+                    #print("found symptom of interest")
+                    fertile_females[fertile_females.VAERS_ID == id][symptom] = 1.0
+
+    N = len(symptom_columns)
+    return fertile_females.iloc[:,:-N], fertile_females.iloc[:,-N:]
 
 
-    return fertile_females.iloc[:,:-len(symptom_columns)], fertile_females.iloc[:,-len(symptom_columns):]
+
+def save_preprocessed_data():
+    X, y = read_and_preprocess_VAERS_data()
+    data_path = Path("./data/preprocessed")
+    if not os.path.exists(data_path):
+        os.makedirs(data_path)
+    X.to_csv(data_path / "patient_data.csv")
+    y.to_csv(data_path / "symptoms_data.csv")
+
+
+
+def prediction_boost(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    abc = AdaBoostClassifier(n_estimators=300, algorithm="SAMME.R")
+    abc.fit(X_train, y_train)
+    print(accuracy_score(y_test, abc.predict(X_test)))
+
 
 
 if __name__ == "__main__":
     # When I need to preprocess new data
-    data = read_and_preprocess_VAERS_data()
-    #save_preprocessed_data() # 5 sek
+    #X, y = read_and_preprocess_VAERS_data()
+    save_preprocessed_data() # 5 sek
 
     # When I can re-use the already preprocessed data
     #load_preprocessed_data() # 5 sek

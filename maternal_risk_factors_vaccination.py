@@ -8,9 +8,17 @@ def maternal_risk_vaccinated_unvaccinated():
     """
     The visualized data only include data collected from pregnant women.
 
-    The following histograms visualises the distribution
-    between the number of vaccinated and the no. of unvaccinated for different
-    maternal factors associated with covid-19 vaccination.
+    The following histograms visualises the distribution of various maternal
+    risk factors associated with covid-19 for vaccinated women (against covid-19)
+    and unvaccinated women.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        None
     """
     # Smokers
     vacc = (0)

@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 
 def antithyreoid_pregnant_women():
     """
-    The visualized data only include data collected from pregnant women.
+    The visualized data only include data collected of pregnant women.
 
-    The following histograms visualises the distribution
-    between the number of vaccinated and the no. of unvaccinated for different
-    maternal factors associated with covid-19 vaccination.
+    The following histograms visualises the distribution between the number
+    of vaccinated and the no. of unvaccinated for different maternal risk factors
+    associated with covid-19 vaccination.
     """
     # Smokers
     risk_preeclampsia = (4.7, 0.66, 0.46)
