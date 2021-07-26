@@ -19,6 +19,7 @@ def cases_vs_vaccinated_hist():
         None
     """
 
+    # number of vaccinated women for each age group
     vaccinated = (8052,55733,46864,75181)
 
     ind = np.arange(4) # the x locations for the groups
@@ -31,6 +32,7 @@ def cases_vs_vaccinated_hist():
     ax1.set_xticks(ind+width)
     ax1.set_xticklabels(("16-17","18-24","25-39","40-44"),fontsize=8)
 
+    # number of cases of covid-19 for each age group
     cases = (3494,3664,2740,2650)
 
     rects4 = ax2.bar(ind + width, cases, width, color='#1f77b4')
