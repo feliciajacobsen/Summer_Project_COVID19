@@ -85,5 +85,44 @@ def maternal_risk_vaccinated_unvaccinated():
 
 
 
+def risk_ratio_pregnant_women():
+    """
+    The following histograms visualizes the data of pregnant women infected with
+    SARS-CoV-2. The risk ratio is taken between women with severe and non-severe
+    disease.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        None
+
+    """
+
+    plt.figure(figsize=(8,6))
+    values = [np.array([1.49]),np.array([1.56]),np.array([3.77]),np.array([0.93]),np.array([1.07]),np.array([1.73]),np.array([2.34]),np.array([2.96]),np.array([1.96]),np.array([2.81])]
+    upper_cf = np.array([np.array([1.21]),np.array([1.09]),np.array([1.86]),np.array([0.55]),np.array([0.67]),np.array([0.78]),np.array([0.99]),np.array([1.17]),np.array([0.34]),np.array([1.67])])-values
+    lower_cf = values-np.array([np.array([1.84]),np.array([2.13]),np.array([7.67]),np.array([1.56]),np.array([1.72]),np.array([3.85]),np.array([5.53]),np.array([7.47]),np.array([11.34]),np.array([4.75])])
+    tot_cf = np.array([lower_cf, upper_cf])
+    labels = ["Age >35 years","Obesity","Smoke","Nullparious","Multiparious","Chronic respiratory disease","Cardiac disease","Diabetes","Gestational diabetes mellitus","Preeclampsia(history or existing)"]
+
+    w = .15 # With of each column
+    n = len(values) # Number of bars to plot
+    x = np.arange(0, len(labels)) # Center position of group on x axis
+
+
+    for i, value in zip(range(10), values):
+        position = x + (w*(1-n)/2) + i*w
+        plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
+
+    plt.xticks(x, labels)
+    plt.ylabel("Odds ratio")
+    plt.title("Odds ratios for various maternal factors of pregnant women infected with SARS-CoV-2 :\n severe infection vs non-severe infection with 95% confidence interval.")
+    plt.show()
+
+
 if __name__ == "__main__":
     maternal_risk_vaccinated_unvaccinated()
+    risk_ratio_pregnant_women()

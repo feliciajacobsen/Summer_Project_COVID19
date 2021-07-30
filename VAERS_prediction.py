@@ -5,7 +5,13 @@ import os
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, precision_score, recall_score
+from sklearn.metrics import (
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    f1_score,
+    plot_roc_curve,
+)
 
 pd.options.mode.chained_assignment = None
 
@@ -262,6 +268,7 @@ def load_preprocessed_data():
             One-hot encoded 1d array for each patient. The vector represents
             a combination of heart- and hormone related symptoms.
     """
+    
     X = pd.read_csv("./data/preprocessed/patient_data.csv")
     y = pd.read_csv("./data/preprocessed/symptoms_data.csv")
 
@@ -274,17 +281,28 @@ def run_ml_model(X, y):
 
     # this classifier solves multiclass-multioutput classification/prediction
     rfc = RandomForestClassifier(
-        bootstrap=True, max_depth=10, max_features="sqrt", random_state=1
+        n_estimators=300,
+        bootstrap=True,
+        max_depth=10,
+        max_features="sqrt",
+        random_state=1,
     )
 
     # fit model on training data
     rfc.fit(X_train, y_train)
 
+    # predict symptoms
+    y_pred = rfc.predict(X_test)
+
     # print performance score based model prediction on test input and true test output
-    precision = precision_score(y_test, rfc.predict(X_test), average="micro")
-    recall = recall_score(y_test, rfc.predict(X_test), average="micro")
-    print(f"Precision = {precision:1.4f}")
-    print(f"Recall = {recall:1.4f}")
+    precision = precision_score(y_test, y_pred, average="samples")
+    recall = recall_score(y_test, y_pred, average="samples")
+    f1 = f1_score(y_test, y_pred, average="samples")
+    print(f"Precision = {precision:2.4f}")
+    print(f"Recall = {recall:2.4f}")
+    print(f"F1 = {f1:2.4f}")
+    #plot_roc_curve(rfc, X_test, y_test)
+    #plt.show()
 
 
 if __name__ == "__main__":
