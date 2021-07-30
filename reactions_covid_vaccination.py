@@ -9,7 +9,7 @@ def reactions_pregnant_moderna_pfizer():
     the Pfizer/Biotech covid19 vaccine, and the second is for the Moderna covid19 vaccine.
     """
 
-    N = 14  # Total number of paired charts
+    N = 10  # Total number of paired charts
 
     ind = np.arange(N) + 0.15  # The x locations for the groups
     width = 0.35  # The width of the bars
@@ -19,11 +19,11 @@ def reactions_pregnant_moderna_pfizer():
 
     # Pfizer
     # Percentages
-    dose_1 = np.array(
-        [7602, 2406, 1497, 795, 254, 256, 30, 492, 82, 209, 117, 178, 20, 318]
+    dose_1 = 100*np.array(
+        [7602, 2406, 1497, 795, 254, 256, 492, 209, 117, 178]
     )/9052.
-    dose_2 = np.array(
-        [5886, 4231, 3138, 2916, 1747, 1648, 315, 1356, 201, 1267, 316, 277, 18, 411]
+    dose_2 = 100*np.array(
+        [5886, 4231, 3138, 2916, 1747, 1648, 1356, 1267, 316, 277]
     )/6638.
 
 
@@ -32,16 +32,16 @@ def reactions_pregnant_moderna_pfizer():
 
     # add title
     ax1.set_title(
-        "Reactons from vaccinated pregnant women with Pfizer/BioTech COVID-19", size=8
+        "Reactions from vaccinated pregnant women with Pfizer/BioTech COVID-19", size=10
     )
 
     # Moderna
     # Percentages
-    dose_1 = np.array(
-        [7360, 2616, 1581, 1167, 442, 453, 62, 638, 77, 342, 160, 189, 22, 739]
+    dose_1 = 100*np.array(
+        [7360, 2616, 1581, 1167, 442, 453, 638, 342, 160, 189]
     )/7930.
-    dose_2 = np.array(
-        [5388, 4541, 3662, 3722, 2755, 2594, 664, 1909, 357, 1871, 401, 332, 18, 1051]
+    dose_2 = 100*np.array(
+        [5388, 4541, 3662, 3722, 2755, 2594, 1909, 1871, 401, 332]
     )/5635.
 
 
@@ -49,7 +49,7 @@ def reactions_pregnant_moderna_pfizer():
     rects2 = ax2.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
 
     ax2.set_title(
-        "Reactons from vaccinated pregnant women with Moderna COVID-19", size=8
+        "Reactions from vaccinated pregnant women with Moderna COVID-19", size=10
     )
 
     # Adding some text for labels and axes ticks
@@ -64,17 +64,13 @@ def reactions_pregnant_moderna_pfizer():
                 "Headache",
                 "Myalgi",
                 "Chills",
-                "Fever/feverish",
-                r"Temperature $\geq$38°C",
+                "Fever",
                 "Nausea",
-                "Vomiting",
                 "Joint pain",
                 "Abdonimal pain",
                 "Diarrhea",
-                "Rash",
-                "Injection-site swelling",
             ),
-            size=5,
+            size=8,
         )
 
     plt.show()
@@ -150,7 +146,7 @@ def data_agebands():
             data_array[2] / 233.,
             data_array[3] / 47345.,
         ]
-    )
+    )*100
     age_band_2 = np.array(
         [
             data_array[4] / 10947.,
@@ -158,7 +154,7 @@ def data_agebands():
             data_array[6] / 8060.,
             data_array[7] / 172245.,
         ]
-    )
+    )*100
     age_band_3 = np.array(
         [
             data_array[8] / 5288.,
@@ -166,7 +162,7 @@ def data_agebands():
             data_array[10] / 3704.,
             data_array[11] / 209052.,
         ]
-    )
+    )*100
     age_band_4 = np.array(
         [
             data_array[12] / 356.,
@@ -174,7 +170,7 @@ def data_agebands():
             data_array[14] / 278.,
             data_array[15] / 194989.,
         ]
-    )
+    )*100
 
     return (age_band_1, age_band_2, age_band_3, age_band_4)
 
@@ -213,20 +209,20 @@ def reactions_pregnant_vs_non_pregnant():
         rects2 = ax1.bar(ind + width + xtra_space, age_band[1], width, color="#17becf")
 
         ax1.set_title(
-            "Reactons from pregnant and non-pregant women of ages "
+            "Reactions from pregnant and non-pregant women of ages "
             + title
             + " years vaccinated with 1st dose against COVID-19",
-            size=8,
+            size=10,
         )
 
         rects1 = ax2.bar(ind, age_band[2], width, color="#2ca02c")
         rects2 = ax2.bar(ind + width + xtra_space, age_band[3], width, color="#17becf")
 
         ax2.set_title(
-            "Reactons from pregnant and non-pregant women of ages "
+            "Reactions from pregnant and non-pregant women of ages "
             + title
             + " years vaccinated with 2nd dose against COVID-19",
-            size=8,
+            size=10,
         )
 
         for axes in [ax1, ax2]:
@@ -245,7 +241,7 @@ def reactions_pregnant_vs_non_pregnant():
                     "Joint pain",
                     "Injection-site swelling",
                 ),
-                size=6,
+                size=8,
             )
 
         plt.show()

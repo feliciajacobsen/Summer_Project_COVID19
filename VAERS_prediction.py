@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 pd.options.mode.chained_assignment = None
 
@@ -221,6 +221,19 @@ def read_and_preprocess_VAERS_data():
 
 
 def save_preprocessed_data():
+    """
+    Function runs read_and_preprocess_VAERS_data() saves the preprocessed data.
+    Patient data (input data) and symptom data (target data) are stored into two
+    separate .csv-files.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        None
+    """
     X, y = read_and_preprocess_VAERS_data()
     data_path = Path("./data/preprocessed")
     if not os.path.exists(data_path):
@@ -232,6 +245,23 @@ def save_preprocessed_data():
 
 
 def load_preprocessed_data():
+    """
+    Function runs read_and_preprocess_VAERS_data() saves the preprocessed data.
+    Patient data (input data) and symptom data (target data) are stored into two
+    separate .csv-files.
+
+    Params:
+    -------
+        None
+
+    Returns:
+    -------
+        X: Pandas dataframe
+            Dataframe of patient info. Each row represent one patient.
+        y: Pandas dataframe
+            One-hot encoded 1d array for each patient. The vector represents
+            a combination of heart- and hormone related symptoms.
+    """
     X = pd.read_csv("./data/preprocessed/patient_data.csv")
     y = pd.read_csv("./data/preprocessed/symptoms_data.csv")
 
@@ -241,11 +271,20 @@ def load_preprocessed_data():
 def run_ml_model(X, y):
     # print(X.head(20))
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    # this classifier solves multiclass-multioutput classification/prediction
     rfc = RandomForestClassifier(
         bootstrap=True, max_depth=10, max_features="sqrt", random_state=1
     )
+
+    # fit model on training data
     rfc.fit(X_train, y_train)
-    print(accuracy_score(y_test, rfc.predict(X_test))) #0.9197739678634581 WHAT!!
+
+    # print performance score based model prediction on test input and true test output
+    precision = precision_score(y_test, rfc.predict(X_test), average="micro")
+    recall = recall_score(y_test, rfc.predict(X_test), average="micro")
+    print(f"Precision = {precision:1.4f}")
+    print(f"Recall = {recall:1.4f}")
 
 
 if __name__ == "__main__":

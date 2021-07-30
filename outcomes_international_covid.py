@@ -27,7 +27,7 @@ def overall_hist():
 
     # add some text for labels, title and axes ticks
     ax.set_ylabel("Count per 1000 cases")
-    ax.set_title("Outcomes in pregnant women\n with Sars-Cov-2 vs non-pregnant women with Sars-Cov-2")
+    ax.set_title("Outcomes in pregnant women\n with Sars-CoV-2 vs non-pregnant women with Sars-CoV-2")
     ax.legend(["Pregnant","Non-pregnant"])
 
 
@@ -59,7 +59,7 @@ def age_25_34_hist():
 
     # add some text for labels, title and axes ticks
     ax.set_ylabel("Count per 1000 cases")
-    ax.set_title("Outcomes in women with Sars-Cov-2 of ages 25-34:\n pregnant vs non-pregnant")
+    ax.set_title("Outcomes in women with Sars-CoV-2 of ages 25-34:\n pregnant vs non-pregnant")
     ax.legend(["Pregnant","Non-pregnant"])
 
 
@@ -92,7 +92,7 @@ def age_35_44_hist():
 
     # add some text for labels, title and axes ticks
     ax.set_ylabel("Count per 1000 cases")
-    ax.set_title("Outcomes in women with Sars-Cov-2 of ages 35-44:\n pregnant vs non-pregnant")
+    ax.set_title("Outcomes in women with Sars-CoV-2 of ages 35-44:\n pregnant vs non-pregnant")
     ax.legend(["Pregnant","Non-pregnant"])
 
 
@@ -124,7 +124,7 @@ def diabetes_hist():
 
     # add some text for labels, title and axes ticks
     ax.set_ylabel("Count per 1000 cases")
-    ax.set_title("Outcomes in women with Sars-Cov-2 and underlying diabetes:\n pregnant vs non-pregnant")
+    ax.set_title("Outcomes in women with Sars-CoV-2 and underlying diabetes:\n pregnant vs non-pregnant")
     ax.legend(["Pregnant","Non-pregnant"])
 
 
@@ -156,7 +156,7 @@ def CVD_hist():
 
     # add some text for labels, title and axes ticks
     ax.set_ylabel("Count per 1000 cases")
-    ax.set_title("Outcomes in women with Sars-Cov-2 and underlying CVD:\n pregnant vs non-pregnant")
+    ax.set_title("Outcomes in women with Sars-CoV-2 and underlying CVD:\n pregnant vs non-pregnant")
     ax.legend(["Pregnant","Non-pregnant"])
 
 
@@ -174,6 +174,7 @@ def outcomes_pregnant_vs_nonpregnant_histogram():
     Each group of histogram is associated with a specific outcome, where each bin
     in a group represent an age group or a group with underlying diabetes or CVD.
     """
+    plt.figure(figsize=(7,7))
     plt.subplot(211)
     outcomes = ["ICU Admission", "Invasive Ventilation","Maternal Death"]
     # each array in the list represent a collection of each population group for each of the outcomes
@@ -188,7 +189,7 @@ def outcomes_pregnant_vs_nonpregnant_histogram():
 
     plt.xticks(x, outcomes, size=8)
     plt.ylabel('Count per 1000 cases')
-    plt.title("Outcomes in pregant women with SARS-Cov-2", size=8)
+    plt.title("Outcomes in pregnant women with SARS-CoV-2", size=8)
     plt.legend(fontsize=8)
 
     plt.subplot(212)
@@ -200,7 +201,7 @@ def outcomes_pregnant_vs_nonpregnant_histogram():
 
     plt.xticks(x, outcomes, size=8)
     plt.ylabel('Count per 1000 cases')
-    plt.title("Outcomes in non-pregant women with SARS-Cov-2", size=8)
+    plt.title("Outcomes in non-pregnant women with SARS-CoV-2", size=8)
     plt.legend(fontsize=8)
 
     plt.show()
@@ -228,7 +229,7 @@ def RR():
         plt.bar(position, value, width=w, label=label, yerr=tot_cf[:,i], capsize=2)
     plt.xticks(x, outcomes)
     plt.ylabel("Risk ratio")
-    plt.title("Risk ratios for various outcomes of women with Sars-Cov-2:\n pregnant vs non-pregnant with 95% confidence interval.")
+    plt.title("Risk ratios for various outcomes of women with Sars-CoV-2:\n pregnant vs non-pregnant with 95% confidence interval.")
     plt.legend(fontsize=8)
 
     plt.show()
@@ -259,7 +260,7 @@ def OR():
 
     plt.xticks(x, outcomes)
     plt.ylabel("Odds ratio")
-    plt.title("Odds ratios of maternal risk factors assiciated with severe SARS-Cov-2")
+    plt.title("Odds ratios of maternal risk factors assiciated with severe SARS-CoV-2")
     plt.legend(fontsize=8)
 
     plt.show()
@@ -288,7 +289,7 @@ def preg_women_hist():
 
     plt.xticks(x, outcomes)
     plt.ylabel("Odds ratio")
-    plt.title("Odds ratios for various outcomes of pregnant women:\n SARS-Cov-2 infected vs non-infected with 95% confidence interval.")
+    plt.title("Odds ratios for various outcomes of pregnant women:\n SARS-CoV-2 infected vs non-infected with 95% confidence interval.")
     plt.xlim([-0.5,0.5])
     plt.legend()
 
@@ -314,4 +315,4 @@ if __name__ == "__main__":
     outcomes_pregnant_vs_nonpregnant_histogram()
     RR()
     OR()
-    preg_women_hist()
+    #preg_women_hist() # will not use this plot because of too large CI
