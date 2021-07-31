@@ -101,6 +101,7 @@ def risk_ratio_pregnant_women():
 
     """
 
+    # Maternal risk factors
     plt.figure(figsize=(8,8))
     values = [np.array([1.49]),np.array([1.56]),np.array([3.77]),np.array([0.93]),np.array([1.07]),np.array([1.73]),np.array([2.34]),np.array([2.96]),np.array([1.96]),np.array([2.81])]
     upper_cf = np.array([np.array([1.21]),np.array([1.09]),np.array([1.86]),np.array([0.55]),np.array([0.67]),np.array([0.78]),np.array([0.99]),np.array([1.17]),np.array([0.34]),np.array([1.67])])-values
@@ -113,14 +114,63 @@ def risk_ratio_pregnant_women():
     x = np.arange(0,1) # Center position of group on x axis
 
 
-    for i, value in zip(range(10), values):
+    for i, value in zip(range(n), values):
         position = x + (w*(1-n)/2) + i*w
         plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
 
-    plt.xticks((x + (w*(1-n)/2) + np.arange(10)*w),labels,size=5,rotation=30)
+    plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
     plt.ylabel("Risk ratio")
     plt.title("Risk ratios for various maternal factors of pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
     plt.show()
+
+
+    # Symptoms
+    plt.figure(figsize=(8,8))
+    values = [np.array([1.32]),np.array([1.26]),np.array([1.33]),np.array([3.57]),np.array([2.42]),np.array([1.96]),np.array([3.07]),np.array([1.08])]
+    upper_cf = np.array([np.array([1.08]),np.array([1.07]),np.array([0.75]),np.array([1.28]),np.array([1.76]),np.array([0.34]),np.array([1.92]),np.array([0.77])])-values
+    lower_cf = values-np.array([np.array([1.61]),np.array([1.48]),np.array([2.34]),np.array([9.94]),np.array([3.34]),np.array([11.35]),np.array([4.92]),np.array([1.53])])
+    tot_cf = np.array([lower_cf, upper_cf])
+    labels = ["Fever","Cough","Fatigue" ,"Headache" ,"Dyspnoea","Chest pain","Diarrhoea","Anosmia/Ageusia"]
+
+    w = .15 # With of each column
+    n = len(values) # Number of bars to plot
+    x = np.arange(0,1) # Center position of group on x axis
+
+
+    for i, value in zip(range(n), values):
+        position = x + (w*(1-n)/2) + i*w
+        plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
+
+    plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
+    plt.ylabel("Risk ratio")
+    plt.title("Risk ratios for various symptoms from pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
+    plt.show()
+
+
+    # Outcomes
+    plt.figure(figsize=(8,8))
+    values = [np.array([11.48]),np.array([2.41]),np.array([0.17]),np.array([0.75]),np.array([1.44])]
+    upper_cf = np.array([np.array([4.43]),np.array([1.74]),np.array([0.02]),np.array([0.33]),np.array([0.99])])-values
+    lower_cf = values-np.array([np.array([29.75]),np.array([3.34]),np.array([1.28]),np.array([1.71]),np.array([2.10])])
+    tot_cf = np.array([lower_cf, upper_cf])
+    labels = ["ICU-admission","Preterm birth (<37 weeks)" ,"Fetal loss","Vaginal births","Caesarean births"]
+
+    w = .15 # With of each column
+    n = len(values) # Number of bars to plot
+    x = np.arange(0,1) # Center position of group on x axis
+
+
+    for i, value in zip(range(n), values):
+        position = x + (w*(1-n)/2) + i*w
+        plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
+
+    plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
+    plt.ylabel("Risk ratio")
+    plt.title("Risk ratios for various outcomes of pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
+    plt.show()
+
+
+
 
 
 if __name__ == "__main__":
