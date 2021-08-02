@@ -5,9 +5,11 @@ import os
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV, RepeatedKFold
+from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import (
     confusion_matrix,
     precision_score,
+    accuracy_score,
     recall_score,
     f1_score,
     plot_roc_curve,
@@ -283,6 +285,10 @@ def run_ml_model(X, y):
     # define model
     rfc = RandomForestClassifier()
 
+
+    net = MLPClassifier(hidden_layer_sizes=(X.shape[1], 100, 80, 60, 40, y.shape[1]), activation="relu", solver="adam", batch_size=64, learning_rate="adaptive", max_iter=1000, random_state=1, verbose=True)
+
+    """
     # define grid space
     grid = dict()
     grid["n_estimators"] = np.arange(100,1000,100).tolist()
@@ -307,16 +313,18 @@ def run_ml_model(X, y):
 
     print(result.best_score_)
     print(result.best_params_)
-
+    """
     # predict symptoms
-    y_pred = result.predict(X_test)
+    #y_pred = result.predict(X_test)
+    net.fit(X_train, y_train)
+    y_pred = net.predict(X_test)
 
     # print performance score based model prediction on test input and true test output
-    precision = precision_score(y_test, y_pred, average="samples")
-    #recall = recall_score(y_test, y_pred, average="samples")
-    #f1 = f1_score(y_test, y_pred, average="samples")
+    precision = precision_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
+    recall = recall_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
+    #f1 = f1_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
     print(f"Precision = {precision:2.4f}")
-    #print(f"Recall = {recall:2.4f}")
+    print(f"Recall = {recall:2.4f}")
     #print(f"F1 = {f1:2.4f}")
     #plot_roc_curve(rfc, X_test, y_test)
     #plt.show()
