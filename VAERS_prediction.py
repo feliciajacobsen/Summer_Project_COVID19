@@ -11,6 +11,7 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
     plot_roc_curve,
+    make_scorer,
 )
 
 pd.options.mode.chained_assignment = None
@@ -297,7 +298,7 @@ def run_ml_model(X, y):
     cv = RepeatedKFold(n_splits=500, n_repeats=10, random_state=1)
 
     # define performance metric to use
-    scorer = sklearn.metrics.make_scorer(precision_score, average="weighted")
+    scorer = make_scorer(precision_score, average="weighted")
 
     search = RandomizedSearchCV(estimator=rfc, param_distributions=grid, n_iter=5, scoring=scorer, n_jobs=-1, cv=cv, random_state=1)
 
@@ -325,7 +326,8 @@ if __name__ == "__main__":
     # X, y = read_and_preprocess_VAERS_data()
 
     # When I need to save preprocess new data
-    save_preprocessed_data() # 5 sek
+    if not os.path.exists(Path("./data/preprocessed")):
+        save_preprocessed_data()
 
     # When I can re-use the already preprocessed data
     X, y = load_preprocessed_data()
