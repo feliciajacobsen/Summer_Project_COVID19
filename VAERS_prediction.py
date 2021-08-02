@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, RepeatedKFold
 from sklearn.metrics import (
     confusion_matrix,
     precision_score,
@@ -268,7 +268,7 @@ def load_preprocessed_data():
             One-hot encoded 1d array for each patient. The vector represents
             a combination of heart- and hormone related symptoms.
     """
-    
+
     X = pd.read_csv("./data/preprocessed/patient_data.csv")
     y = pd.read_csv("./data/preprocessed/symptoms_data.csv")
 
@@ -276,31 +276,47 @@ def load_preprocessed_data():
 
 
 def run_ml_model(X, y):
-    # print(X.head(20))
+    # load dataset and split into train and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    # this classifier solves multiclass-multioutput classification/prediction
-    rfc = RandomForestClassifier(
-        n_estimators=300,
-        bootstrap=True,
-        max_depth=10,
-        max_features="sqrt",
-        random_state=1,
-    )
+    # define model
+    rfc = RandomForestClassifier()
+
+    # define grid space
+    grid = dict()
+    grid["n_estimators"] = np.arange(100,1000,100).tolist()
+    grid["bootstrap"] = [True]
+    grid["n_jobs"] = [-1]
+    grid["random_state"] = [1]
+    grid["min_samples_leaf"] = np.arange(1,500,50).tolist()
+    grid["min_samples_split"] = np.arange(1,500,50).tolist()
+    grid["max_depth"] = np.arange(500,2000,100).tolist()
+    grid["max_features"] = ["sqrt", "log2", None]
+
+    # define evaluation method
+    cv = RepeatedKFold(n_splits=500, n_repeats=10, random_state=1)
+
+    # define performance metric to use
+    scorer = sklearn.metrics.make_scorer(precision_score, average="weighted")
+
+    search = RandomizedSearchCV(estimator=rfc, param_distributions=grid, n_iter=5, scoring=scorer, n_jobs=-1, cv=cv, random_state=1)
 
     # fit model on training data
-    rfc.fit(X_train, y_train)
+    result = search.fit(X_train, y_train)
+
+    print(result.best_score_)
+    print(result.best_params_)
 
     # predict symptoms
-    y_pred = rfc.predict(X_test)
+    y_pred = result.predict(X_test)
 
     # print performance score based model prediction on test input and true test output
     precision = precision_score(y_test, y_pred, average="samples")
-    recall = recall_score(y_test, y_pred, average="samples")
-    f1 = f1_score(y_test, y_pred, average="samples")
+    #recall = recall_score(y_test, y_pred, average="samples")
+    #f1 = f1_score(y_test, y_pred, average="samples")
     print(f"Precision = {precision:2.4f}")
-    print(f"Recall = {recall:2.4f}")
-    print(f"F1 = {f1:2.4f}")
+    #print(f"Recall = {recall:2.4f}")
+    #print(f"F1 = {f1:2.4f}")
     #plot_roc_curve(rfc, X_test, y_test)
     #plt.show()
 
@@ -309,7 +325,7 @@ if __name__ == "__main__":
     # X, y = read_and_preprocess_VAERS_data()
 
     # When I need to save preprocess new data
-    # save_preprocessed_data() # 5 sek
+    save_preprocessed_data() # 5 sek
 
     # When I can re-use the already preprocessed data
     X, y = load_preprocessed_data()

@@ -225,6 +225,7 @@ def reactions_pregnant_vs_non_pregnant():
             size=10,
         )
 
+        # Add labels, define axes etc. to plot 
         for axes in [ax1, ax2]:
             axes.legend(["Pregnant", "Non-pregnant"], fontsize=8)
             axes.set_xticks(ind + 0.15 + xtra_space)
