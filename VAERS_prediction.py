@@ -182,6 +182,58 @@ def read_and_preprocess_VAERS_data():
     # drop column VAX_MANU as it is now encoded
     fertile_females.drop(["VAX_MANU"], axis=1, inplace=True)
 
+    # list of heart related symptoms (defined in separate .txt-file)
+    with open("heart_symptoms.txt", "r") as infile:
+        heart_symptom_columns = infile.readlines()
+        infile.close()
+
+    # list of  hormone-related symptoms (defined in separate .txt-file)
+    with open("hormone_symptoms.txt", "r") as infile:
+        hormone_symptom_columns = infile.readlines()
+        infile.close()
+
+    # removing "\n"-character from list
+    heart_symptom_columns, hormone_symptom_columns = [x.strip() for x in heart_symptom_columns], [x.strip() for x in hormone_symptom_columns]
+
+    # empty data frame with two labels (hormone and heart symptoms)
+    symptoms_df = pd.DataFrame(
+        data=np.zeros((len(fertile_females), 2)),
+        columns=["Heart related symptoms", "Hormone related symptoms"],
+        )
+
+    # concatenating patient info and symptoms of interest
+    fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
+
+    # one-hot encode the symptoms of interest and remove the rest
+    for i, id in enumerate(fertile_females.VAERS_ID):
+        reports = symptoms[
+            symptoms.VAERS_ID == id
+        ]  # symptom reports must match with correct patient
+        # loop over each report for each patient
+        for index, report in reports.iterrows():
+            # loop over each symptom in a report
+            for symptom_number in [
+                "SYMPTOM1",
+                "SYMPTOM2",
+                "SYMPTOM3",
+                "SYMPTOM4",
+                "SYMPTOM5",
+            ]:
+                symptom = report[symptom_number]
+                # check if symptom is equal to the list of symptom of interest
+                if symptom in heart_symptom_columns:
+                    fertile_females.loc[fertile_females.VAERS_ID==id, "Heart related symptoms"] = 1.0
+
+                if symptom in hormone_symptom_columns:
+                    fertile_females.loc[fertile_females.VAERS_ID==id, "Hormone related symptoms"] = 1.0
+
+    # drop patient ID
+    fertile_females.drop(["VAERS_ID"], axis=1, inplace=True)
+
+    # return separate patient info dataframe and a dataframe for symptom labels
+    return fertile_females.iloc[:, :-2], fertile_females.iloc[:, -2:]
+
+    """
     # list of heart- and hormone-related symptoms (defined in separate .txt-file)
     with open("symptoms.txt", "r") as infile:
         symptom_columns = infile.readlines()
@@ -194,7 +246,7 @@ def read_and_preprocess_VAERS_data():
     symptoms_df = pd.DataFrame(
         data=np.zeros((len(fertile_females), len(symptom_columns))),
         columns=symptom_columns,
-    )
+        )
 
     # concatenating patient info and symptoms of interest
     fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
@@ -227,7 +279,7 @@ def read_and_preprocess_VAERS_data():
 
     # return separate patient info dataframe and a dataframe for symptom labels
     return fertile_females.iloc[:, :-N], fertile_females.iloc[:, -N:]
-
+    """
 
 def save_preprocessed_data():
     """
@@ -286,7 +338,7 @@ def run_ml_model(X, y):
     rfc = RandomForestClassifier()
 
 
-    net = MLPClassifier(hidden_layer_sizes=(X.shape[1], 100, 80, 60, 40, y.shape[1]), activation="relu", solver="adam", batch_size=64, learning_rate="adaptive", max_iter=1000, random_state=1, verbose=True)
+    net = MLPClassifier(hidden_layer_sizes=(X.shape[1], 100, 80, 60, 40, y.shape[1]), activation="relu", solver="adam", batch_size=64, learning_rate="adaptive", max_iter=200, random_state=1, verbose=True)
 
     """
     # define grid space
@@ -331,14 +383,13 @@ def run_ml_model(X, y):
 
 
 if __name__ == "__main__":
-    # X, y = read_and_preprocess_VAERS_data()
 
     # When I need to save preprocess new data
     if not os.path.exists(Path("./data/preprocessed")):
         save_preprocessed_data()
 
     # When I can re-use the already preprocessed data
-    X, y = load_preprocessed_data()
+    #X, y = load_preprocessed_data()
 
     # When I need to run prediction model
-    run_ml_model(X, y)
+    #run_ml_model(X, y)
