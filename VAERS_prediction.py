@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 from pathlib import Path
+import seaborn as sns
+from imblearn.over_sampling import RandomOverSampler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV, RepeatedKFold
 from sklearn.neural_network import MLPClassifier
@@ -233,53 +235,6 @@ def read_and_preprocess_VAERS_data():
     # return separate patient info dataframe and a dataframe for symptom labels
     return fertile_females.iloc[:, :-2], fertile_females.iloc[:, -2:]
 
-    """
-    # list of heart- and hormone-related symptoms (defined in separate .txt-file)
-    with open("symptoms.txt", "r") as infile:
-        symptom_columns = infile.readlines()
-        infile.close()
-
-    # removing "\n"-character from list
-    symptom_columns = [x.strip() for x in symptom_columns]
-
-    # making empty dataframe of symptoms
-    symptoms_df = pd.DataFrame(
-        data=np.zeros((len(fertile_females), len(symptom_columns))),
-        columns=symptom_columns,
-        )
-
-    # concatenating patient info and symptoms of interest
-    fertile_females = pd.concat([fertile_females, symptoms_df], axis=1)
-
-    # one-hot encode the symptoms of interest and remove the rest
-    for i, id in enumerate(fertile_females.VAERS_ID):
-        reports = symptoms[
-            symptoms.VAERS_ID == id
-        ]  # symptom reports must match with correct patient
-        # loop over each report for each patient
-        for index, report in reports.iterrows():
-            # loop over each symptom in a report
-            for symptom_number in [
-                "SYMPTOM1",
-                "SYMPTOM2",
-                "SYMPTOM3",
-                "SYMPTOM4",
-                "SYMPTOM5",
-            ]:
-                symptom = report[symptom_number]
-                # check if symptom is equal to the list of symptom of interest
-                if symptom in symptom_columns:
-                    fertile_females.loc[fertile_females.VAERS_ID == id, symptom] = 1.0
-
-    # find number of symptom of interest
-    N = len(symptom_columns)
-
-    # drop patient ID
-    fertile_females.drop(["VAERS_ID"], axis=1, inplace=True)
-
-    # return separate patient info dataframe and a dataframe for symptom labels
-    return fertile_females.iloc[:, :-N], fertile_females.iloc[:, -N:]
-    """
 
 def save_preprocessed_data():
     """
@@ -329,16 +284,124 @@ def load_preprocessed_data():
 
     return X, y
 
+def reverse_one_hot_encoding(y):
+    """
+    Function reverse one hot encoded multi-label targets. There are a total of
+    four unique combinations of the two labeled targets
+
+    class 1 = no heart- og hormone-related symptoms [0.0,0.0]
+    class 2 = heart symptom [1.0,0.0]
+    class 3 = hormone symptom [0.0,1.0]
+    class 4 = both symptoms [1.0,1.0]
+
+    Params:
+    -------
+        y: pandas DataFrame
+            Must contain 2 columns of one-hot encoded multilabel targets
+
+    Returns:
+    -------
+        y: Numpy array
+            1D numpy arrray containing a total of four unique classes
+
+    """
+
+    y_new = np.zeros(y.shape[0])
+
+    for i, tup in enumerate(y.iterrows()):
+        idx, r = tup
+        if (r.iloc[0]==0.0 and r.iloc[1]==0.0):
+            y_new[i]=1.0
+        elif (r.iloc[0]==1.0 and r.iloc[1]==0.0):
+            y_new[i] = 2.0
+        elif (r.iloc[0]==0.0 and r.iloc[1]==1.0):
+            y_new[i] = 3.0
+        elif (r.iloc[0]==1.0 and r.iloc[1]==1.0):
+            y_new[i] = 4.0
+
+    return y_new
+
+
+def one_hot_encoding(y):
+    """
+    Function one hot encodes multi-label targets. There are a total of
+    four unique combinations of the two labeled targets
+
+    class 1 = no heart- og hormone-related symptoms [0.0,0.0]
+    class 2 = heart symptom [1.0,0.0]
+    class 3 = hormone symptom [0.0,1.0]
+    class 4 = both symptoms [1.0,1.0]
+
+    Params:
+    -------
+        y: Numpy array
+            1D numpy array
+
+    Returns:
+    -------
+        y: Numpy array
+            Contains 2 columns of one-hot encoded multilabel targets
+
+    """
+
+    y_new = np.zeros((y.shape[0], 2))
+
+    for i, c in enumerate(y):
+        if c==1.0:
+            y_new[i,0]= 0.0
+            y_new[i,0]= 0.0
+        elif c==2.0:
+            y_new[i,0]= 1.0
+            y_new[i,1]= 0.0
+        elif c==3.0:
+            y_new[i,0]= 0.0
+            y_new[i,1]= 1.0
+        elif c==4.0:
+            y_new[i,0]= 1.0
+            y_new[i,1]= 1.0
+
+    return y_new
+
+
+def downsample_data(X, y):
+    # randomly downsample rows with under-represented target labels
+    no_symptoms = y_train.loc[(y_train["Heart related symptoms"]==0.0) & (y_train["Hormone related symptoms"]==0.0)]
+    random_idx = no_symptoms.sample(frac=0.6).sort_index().index.tolist()
+
+    return X_train.drop(index=random_idx), y_train.drop(index=random_idx)
+
+
+def upsample_data(X, y):
+    # reverse one-hot encoding in order to use RandomOverSampler
+    y = reverse_one_hot_encoding(y)
+
+     # upsample all classes except for the majority class
+    ros = RandomOverSampler(sampling_strategy="not majority", random_state=1)
+    X_res, y_res = ros.fit_resample(X, y)
+
+    # return to one-hot encoded multilabel targets
+    y_res = one_hot_encoding(y_res)
+
+    # make target array into pandas dataframe
+    y_res = pd.DataFrame(
+        data=y_res,
+        columns=["Heart related symptoms", "Hormone related symptoms"],
+        )
+
+    return X_res, y_res
+
 
 def run_ml_model(X, y):
     # load dataset and split into train and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
+    X_train, y_train = upsample_data(X_train, y_train)
+
     # define model
-    rfc = RandomForestClassifier()
-
-
-    net = MLPClassifier(hidden_layer_sizes=(X.shape[1], 100, 80, 60, 40, y.shape[1]), activation="relu", solver="adam", batch_size=64, learning_rate="adaptive", max_iter=200, random_state=1, verbose=True)
+    #rfc = RandomForestClassifier(n_estimators=300,bootstrap=True, random_state=1, max_depth=200, max_features="sqrt")
+    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="adam", batch_size=64, max_iter=100, random_state=1, verbose=True) # Recall = 0.3132
+    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=100, random_state=1, verbose=True) #Recall = 0.3904
+    net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=300, random_state=1, verbose=True) #Recall = 0.3060
 
     """
     # define grid space
@@ -372,14 +435,27 @@ def run_ml_model(X, y):
     y_pred = net.predict(X_test)
 
     # print performance score based model prediction on test input and true test output
-    precision = precision_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
-    recall = recall_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
-    #f1 = f1_score(y_test, y_pred, average="samples", labels=np.unique(y_pred))
-    print(f"Precision = {precision:2.4f}")
+    recall = recall_score(y_test, y_pred, average="weighted")
+
+    print(accuracy_score(y_test, y_pred))
     print(f"Recall = {recall:2.4f}")
-    #print(f"F1 = {f1:2.4f}")
-    #plot_roc_curve(rfc, X_test, y_test)
-    #plt.show()
+
+    y_pred = pd.DataFrame(y_pred, columns = ["Heart related symptoms","Hormone related symptoms"])
+
+    y_test_new = reverse_one_hot_encoding(y_test)
+    y_pred_new= reverse_one_hot_encoding(y_pred)
+
+    plt.title("Accuracy scores of vaccinated femlaes (COVID-19)\n of maternal age from VAERS dataset")
+    sns.heatmap(
+        confusion_matrix(y_test_new, y_pred_new),
+        cmap="Blues",
+        annot=True,
+        fmt="d",
+    )
+    plt.xlabel("Predicted label")
+    plt.ylabel("True label")
+    plt.show()
+
 
 
 if __name__ == "__main__":
@@ -389,7 +465,7 @@ if __name__ == "__main__":
         save_preprocessed_data()
 
     # When I can re-use the already preprocessed data
-    #X, y = load_preprocessed_data()
+    X, y = load_preprocessed_data()
 
     # When I need to run prediction model
-    #run_ml_model(X, y)
+    run_ml_model(X, y)

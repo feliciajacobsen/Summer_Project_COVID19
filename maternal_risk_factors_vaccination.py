@@ -104,8 +104,8 @@ def risk_ratio_pregnant_women():
     # Maternal risk factors
     plt.figure(figsize=(8,8))
     values = [np.array([1.49]),np.array([1.56]),np.array([3.77]),np.array([0.93]),np.array([1.07]),np.array([1.73]),np.array([2.34]),np.array([2.96]),np.array([1.96]),np.array([2.81])]
-    upper_cf = np.array([np.array([1.21]),np.array([1.09]),np.array([1.86]),np.array([0.55]),np.array([0.67]),np.array([0.78]),np.array([0.99]),np.array([1.17]),np.array([0.34]),np.array([1.67])])-values
-    lower_cf = values-np.array([np.array([1.84]),np.array([2.13]),np.array([7.67]),np.array([1.56]),np.array([1.72]),np.array([3.85]),np.array([5.53]),np.array([7.47]),np.array([11.34]),np.array([4.75])])
+    upper_cf = np.array([np.array([1.84]),np.array([2.13]),np.array([7.67]),np.array([1.56]),np.array([1.72]),np.array([3.85]),np.array([5.53]),np.array([7.47]),np.array([11.34]),np.array([4.75])])-values
+    lower_cf = values-np.array([np.array([1.21]),np.array([1.09]),np.array([1.86]),np.array([0.55]),np.array([0.67]),np.array([0.78]),np.array([0.99]),np.array([1.17]),np.array([0.34]),np.array([1.67])])
     tot_cf = np.array([lower_cf, upper_cf])
     labels = ["Age >35 years","Obesity","Smoke","Nullparious","Multiparious","Chronic respiratory disease","Cardiac disease","Diabetes","Gestational diabetes mellitus","Preeclampsia(history/existing)"]
 
@@ -119,6 +119,7 @@ def risk_ratio_pregnant_women():
         plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
 
     plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
+    plt.yticks(np.arange(0, np.max(upper_cf)+2, 1.0))
     plt.ylabel("Risk ratio")
     plt.title("Risk ratios for various maternal factors of pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
     plt.show()
@@ -127,8 +128,8 @@ def risk_ratio_pregnant_women():
     # Symptoms
     plt.figure(figsize=(8,8))
     values = [np.array([1.32]),np.array([1.26]),np.array([1.33]),np.array([3.57]),np.array([2.42]),np.array([1.96]),np.array([3.07]),np.array([1.08])]
-    upper_cf = np.array([np.array([1.08]),np.array([1.07]),np.array([0.75]),np.array([1.28]),np.array([1.76]),np.array([0.34]),np.array([1.92]),np.array([0.77])])-values
-    lower_cf = values-np.array([np.array([1.61]),np.array([1.48]),np.array([2.34]),np.array([9.94]),np.array([3.34]),np.array([11.35]),np.array([4.92]),np.array([1.53])])
+    upper_cf = np.array([np.array([1.61]),np.array([1.48]),np.array([2.34]),np.array([9.94]),np.array([3.34]),np.array([11.35]),np.array([4.92]),np.array([1.53])])-values
+    lower_cf = values-np.array([np.array([1.08]),np.array([1.07]),np.array([0.75]),np.array([1.28]),np.array([1.76]),np.array([0.34]),np.array([1.92]),np.array([0.77])])
     tot_cf = np.array([lower_cf, upper_cf])
     labels = ["Fever","Cough","Fatigue" ,"Headache" ,"Dyspnoea","Chest pain","Diarrhoea","Anosmia/Ageusia"]
 
@@ -142,6 +143,7 @@ def risk_ratio_pregnant_women():
         plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
 
     plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
+    plt.yticks(np.arange(0, np.max(upper_cf)+2, 1.0))
     plt.ylabel("Risk ratio")
     plt.title("Risk ratios for various symptoms from pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
     plt.show()
@@ -150,8 +152,8 @@ def risk_ratio_pregnant_women():
     # Outcomes
     plt.figure(figsize=(8,8))
     values = [np.array([11.48]),np.array([2.41]),np.array([0.17]),np.array([0.75]),np.array([1.44])]
-    upper_cf = np.array([np.array([4.43]),np.array([1.74]),np.array([0.02]),np.array([0.33]),np.array([0.99])])-values
-    lower_cf = values-np.array([np.array([29.75]),np.array([3.34]),np.array([1.28]),np.array([1.71]),np.array([2.10])])
+    upper_cf = np.array([np.array([29.75]),np.array([3.34]),np.array([1.28]),np.array([1.71]),np.array([2.10])])-values
+    lower_cf = values-np.array([np.array([4.43]),np.array([1.74]),np.array([0.02]),np.array([0.33]),np.array([0.99])])
     tot_cf = np.array([lower_cf, upper_cf])
     labels = ["ICU-admission","Preterm birth (<37 weeks)" ,"Fetal loss","Vaginal births","Caesarean births"]
 
@@ -165,6 +167,7 @@ def risk_ratio_pregnant_women():
         plt.bar(position, value, width=w, yerr=tot_cf[:,i], capsize=2)
 
     plt.xticks((x + (w*(1-n)/2) + np.arange(n)*w),labels,size=5,rotation=30)
+    plt.yticks(np.arange(0, 32, 1.0))
     plt.ylabel("Risk ratio")
     plt.title("Risk ratios for various outcomes of pregnant women infected with SARS-CoV-2 :\nSevere infection vs non-severe infection with 95% confidence interval.")
     plt.show()
