@@ -423,13 +423,14 @@ def run_ml_model(X, y):
     # reverse one-hot encoding in order to get recall and confusion matrix
     y_test_new, y_pred_new = reverse_one_hot_encoding(y_test), reverse_one_hot_encoding(y_pred)
 
-    # print performance score based model prediction on test input and true test output
+    # print performance scores based model prediction on test input and true test output
     recall = recall_score(y_test_new, y_pred_new, average="weighted")
     f1 = f1_score(y_test_new, y_pred_new, average="weighted")
     print(f"Recall = {recall:2.4f}")
     print(f"F1 = {f1:2.4f}")
 
     # Plot confusion matrix
+    plt.figure(figsize=(7,7))
     plt.title("Accuracy scores of vaccinated femlaes (COVID-19)\n of maternal age from VAERS dataset")
     labels = ["No SOI","Heart related","Hormone related","Both"]
     sns.heatmap(
@@ -445,11 +446,13 @@ def run_ml_model(X, y):
     plt.show()
 
     # Plot histogram of feature importancess
-    importances = rfc.feature_importances_
+    plt.figure(figsize=(10,5))
+    features = X_train.columns # list of feature names
+    importances = rfc.feature_importances_ # get feature importances
     indices = np.argsort(importances)
     plt.title("Feature Importances")
-    plt.barh(range(len(indices)), importances[indices], color="1f77b4", align="center")
-    plt.yticks(range(len(indices)), [features[i] for i in indices])
+    plt.barh(range(len(indices)), importances[indices], color="#1f77b4", align="center")
+    plt.yticks(range(len(indices)), [features[i] for i in indices], fontsize=8)
     plt.xlabel("Relative Importance")
     plt.show()
 
