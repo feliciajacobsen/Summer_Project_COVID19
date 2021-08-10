@@ -415,7 +415,7 @@ def run_ml_model(X, y):
     y_pred = rfc.predict(X_test)
 
     # print performance score based model prediction on test input and true test output
-    recall = recall_score(y_test, y_pred, average="weighted")
+    recall = recall_score(y_test, y_pred, average="binary")
 
     print(accuracy_score(y_test, y_pred))
     print(f"Recall = {recall:2.4f}")
