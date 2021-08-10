@@ -424,10 +424,14 @@ def run_ml_model(X, y):
     y_test_new, y_pred_new = reverse_one_hot_encoding(y_test), reverse_one_hot_encoding(y_pred)
 
     # print performance scores based model prediction on test input and true test output
-    recall = recall_score(y_test_new, y_pred_new, average="weighted")
-    f1 = f1_score(y_test_new, y_pred_new, average="weighted")
+    recall = recall_score(y_test, y_pred, average="weighted")
+    f1 = f1_score(y_test, y_pred, average="weighted")
     print(f"Recall = {recall:2.4f}")
     print(f"F1 = {f1:2.4f}")
+
+
+    if not os.path.exists(Path("./figures")):
+         os.makedirs(Path("./figures"))
 
     # Plot confusion matrix
     plt.figure(figsize=(7,7))
@@ -443,18 +447,18 @@ def run_ml_model(X, y):
     )
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
-    plt.show()
+    plt.savefig("./figures/confusion_matrix.png")
 
     # Plot histogram of feature importancess
-    plt.figure(figsize=(10,5))
+    plt.figure(figsize=(12,5))
     features = X_train.columns # list of feature names
     importances = rfc.feature_importances_ # get feature importances
     indices = np.argsort(importances)
     plt.title("Feature Importances")
     plt.barh(range(len(indices)), importances[indices], color="#1f77b4", align="center")
-    plt.yticks(range(len(indices)), [features[i] for i in indices], fontsize=8)
+    plt.yticks(range(len(indices)), [features[i] for i in indices], fontsize=6)
     plt.xlabel("Relative Importance")
-    plt.show()
+    plt.savefig("./figures/feature_importances.png")
 
 
 
