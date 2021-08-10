@@ -402,8 +402,8 @@ def run_ml_model(X, y):
     X_train, y_train = upsample_data(X_train, y_train)
 
     # define model
-    rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=500, max_features="sqrt") #Recall = 0.2489
-    #rfc = RandomForestClassifier(n_estimators=4000,bootstrap=True, random_state=1, max_depth=2000, max_features="sqrt")
+    #rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=500, max_features="sqrt") #Recall = 0.2489
+    rfc = RandomForestClassifier(n_estimators=50,bootstrap=True, random_state=1, max_depth=10, max_features="sqrt")
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="adam", batch_size=64, max_iter=100, random_state=1, verbose=True) # Recall = 0.3132
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=100, random_state=1, verbose=True) #Recall = 0.3904
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="relu", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=200, random_state=1, verbose=True)
