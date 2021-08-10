@@ -411,10 +411,9 @@ def run_ml_model(X, y):
     # define model
     #rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=500, max_features="sqrt") #Recall = 0.2489
     #rfc = RandomForestClassifier(n_estimators=50,bootstrap=True, random_state=1, max_depth=10, max_features="sqrt") # Recall = 0.8184
-    rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=100, max_features="sqrt")
+    rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=100, max_features="sqrt") # Recall = 0.8751
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="adam", batch_size=64, max_iter=100, random_state=1, verbose=True) # Recall = 0.3132
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=100, random_state=1, verbose=True) #Recall = 0.3904
-    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="relu", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=200, random_state=1, verbose=True)
 
     # train on training data
     rfc.fit(X_train, y_train)
@@ -422,15 +421,12 @@ def run_ml_model(X, y):
     # predict symptoms on test input data
     y_pred = rfc.predict(X_test)
 
+    # reverse one-hot encoding in order to get recall and confusion matrix
+    y_test_new, y_pred_new = reverse_one_hot_encoding(y_test), reverse_one_hot_encoding(y_pred)
+
     # print performance score based model prediction on test input and true test output
-    recall = recall_score(reverse_one_hot_encoding(y_test), reverse_one_hot_encoding(y_pred), average="weighted")
-
+    recall = recall_score(y_test_new, y_pred_new, average="weighted")
     print(f"Recall = {recall:2.4f}")
-
-    y_pred = pd.DataFrame(y_pred, columns = ["Heart related symptoms","Hormone related symptoms"])
-
-    y_test_new = reverse_one_hot_encoding(y_test)
-    y_pred_new= reverse_one_hot_encoding(y_pred)
 
     # Plot confusion matrix
     plt.title("Accuracy scores of vaccinated femlaes (COVID-19)\n of maternal age from VAERS dataset")
