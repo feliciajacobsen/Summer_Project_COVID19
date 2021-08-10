@@ -308,6 +308,13 @@ def reverse_one_hot_encoding(y):
 
     y_new = np.zeros(y.shape[0])
 
+    if type(y) != pd.DataFrame:
+        y = pd.DataFrame(
+                data=y,
+                columns=["Heart related symptoms", "Hormone related symptoms"],
+                )
+
+
     for i, tup in enumerate(y.iterrows()):
         idx, r = tup
         if (r.iloc[0]==0.0 and r.iloc[1]==0.0):
