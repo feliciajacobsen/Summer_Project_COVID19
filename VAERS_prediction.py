@@ -11,7 +11,6 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import (
     confusion_matrix,
     precision_score,
-    accuracy_score,
     recall_score,
     f1_score,
     plot_roc_curve,
@@ -426,7 +425,9 @@ def run_ml_model(X, y):
 
     # print performance score based model prediction on test input and true test output
     recall = recall_score(y_test_new, y_pred_new, average="weighted")
+    f1 = f1_score(y_test_new, y_pred_new, average="weighted")
     print(f"Recall = {recall:2.4f}")
+    print(f"F1 = {f1:2.4f}")
 
     # Plot confusion matrix
     plt.title("Accuracy scores of vaccinated femlaes (COVID-19)\n of maternal age from VAERS dataset")
@@ -441,6 +442,15 @@ def run_ml_model(X, y):
     )
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
+    plt.show()
+
+    # Plot histogram of feature importancess
+    importances = rfc.feature_importances_
+    indices = np.argsort(importances)
+    plt.title("Feature Importances")
+    plt.barh(range(len(indices)), importances[indices], color="1f77b4", align="center")
+    plt.yticks(range(len(indices)), [features[i] for i in indices])
+    plt.xlabel("Relative Importance")
     plt.show()
 
 
