@@ -10,9 +10,7 @@ from sklearn.model_selection import train_test_split, RandomizedSearchCV, Repeat
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import (
     confusion_matrix,
-    precision_score,
     recall_score,
-    f1_score,
     plot_roc_curve,
     make_scorer,
 )
@@ -372,15 +370,48 @@ def one_hot_encoding(y):
 def downsample_data(X, y):
     """
     Function randomly downsample 60% of the original data.
+
+    Params:
+    -------
+        X: pandas DataFrame
+            Input data
+        y: pandas DataFrame
+            2D pandas dataframe containing target labels
+
+    Returns:
+    -------
+        X: pandas DataFrame
+            downsampled input data
+        y: pandas DataFrame
+            downsampled array of target labels
     """
+
     # randomly downsample rows with under-represented target labels
-    no_symptoms = y_train.loc[(y_train["Heart related symptoms"]==0.0) & (y_train["Hormone related symptoms"]==0.0)]
+    no_symptoms = y.loc[(y["Heart related symptoms"]==0.0) & (y["Hormone related symptoms"]==0.0)]
     random_idx = no_symptoms.sample(frac=0.6).sort_index().index.tolist()
 
-    return X_train.drop(index=random_idx), y_train.drop(index=random_idx)
+    return X.drop(index=random_idx), y.drop(index=random_idx)
 
 
 def upsample_data(X, y):
+    """
+    Function randomly upsample input and target data such that all classes are
+    equally represented as majority class.
+
+    Params:
+    -------
+        X: pandas DataFrame
+            Input data
+        y: pandas DataFrame
+            2D pandas dataframe containing target labels
+
+    Returns:
+    -------
+        X: pandas DataFrame
+            downsampled input data
+        y: pandas DataFrame
+            downsampled array of target labels
+    """
     # reverse one-hot encoding in order to use RandomOverSampler
     y = reverse_one_hot_encoding(y)
 
@@ -401,6 +432,25 @@ def upsample_data(X, y):
 
 
 def run_ml_model(X, y):
+    """
+    Function performs multi-label classification with the Random Forest
+    classifier from the Scikit-learn library.
+
+    Function prints the recall score and saves confusion matrix and a histogram of
+    relative feature importances in a separate folder named "figures".
+
+
+    Params:
+    -------
+        X: pandas DataFrame
+            Input data
+        y: pandas DataFrame
+            2D pandas dataframe containing target labels
+
+    Returns:
+    -------
+        None
+    """
     # load dataset and split into train and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
@@ -408,11 +458,8 @@ def run_ml_model(X, y):
     X_train, y_train = upsample_data(X_train, y_train)
 
     # define model
-    #rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=500, max_features="sqrt") #Recall = 0.2489
-    #rfc = RandomForestClassifier(n_estimators=50,bootstrap=True, random_state=1, max_depth=10, max_features="sqrt") # Recall = 0.8184
-    rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=100, max_features="sqrt") # Recall = 0.8751
-    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="adam", batch_size=64, max_iter=100, random_state=1, verbose=True) # Recall = 0.3132
-    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=100, random_state=1, verbose=True) #Recall = 0.3904
+    rfc = RandomForestClassifier(n_estimators=250,bootstrap=True, random_state=1, max_depth=2, max_features="sqrt")
+
 
     # train on training data
     rfc.fit(X_train, y_train)
@@ -425,9 +472,7 @@ def run_ml_model(X, y):
 
     # print performance scores based model prediction on test input and true test output
     recall = recall_score(y_test, y_pred, average="weighted")
-    f1 = f1_score(y_test, y_pred, average="weighted")
     print(f"Recall = {recall:2.4f}")
-    print(f"F1 = {f1:2.4f}")
 
 
     if not os.path.exists(Path("./figures")):
