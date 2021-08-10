@@ -474,7 +474,6 @@ def run_ml_model(X, y):
     recall = recall_score(y_test, y_pred, average="weighted")
     print(f"Recall = {recall:2.4f}")
 
-
     if not os.path.exists(Path("./figures")):
          os.makedirs(Path("./figures"))
 
