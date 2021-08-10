@@ -6,12 +6,10 @@ from pathlib import Path
 import seaborn as sns
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, RepeatedKFold
-from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     confusion_matrix,
     recall_score,
-    plot_roc_curve,
     make_scorer,
 )
 
