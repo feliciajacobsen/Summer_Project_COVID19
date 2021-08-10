@@ -32,7 +32,7 @@ def reactions_pregnant_moderna_pfizer():
 
     # add title
     ax1.set_title(
-        "Reactions from vaccinated pregnant women with Pfizer/BioTech COVID-19", size=10
+        "Reactions from vaccinated pregnant women with Pfizer/BioTech vaccine (COVID-19)", size=10
     )
 
     # Moderna
@@ -49,7 +49,7 @@ def reactions_pregnant_moderna_pfizer():
     rects2 = ax2.bar(ind + width + xtra_space, dose_2, width, color="#17becf")
 
     ax2.set_title(
-        "Reactions from vaccinated pregnant women with Moderna COVID-19", size=10
+        "Reactions from vaccinated pregnant women with Moderna vaccine (COVID-19)", size=10
     )
 
     # Adding some text for labels and axes ticks
@@ -225,7 +225,7 @@ def reactions_pregnant_vs_non_pregnant():
             size=10,
         )
 
-        # Add labels, define axes etc. to plot 
+        # Add labels, define axes etc. to plot
         for axes in [ax1, ax2]:
             axes.legend(["Pregnant", "Non-pregnant"], fontsize=8)
             axes.set_xticks(ind + 0.15 + xtra_space)

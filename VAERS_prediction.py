@@ -364,6 +364,9 @@ def one_hot_encoding(y):
 
 
 def downsample_data(X, y):
+    """
+    Function randomly downsample 60% of the original data.
+    """
     # randomly downsample rows with under-represented target labels
     no_symptoms = y_train.loc[(y_train["Heart related symptoms"]==0.0) & (y_train["Hormone related symptoms"]==0.0)]
     random_idx = no_symptoms.sample(frac=0.6).sort_index().index.tolist()
@@ -395,44 +398,21 @@ def run_ml_model(X, y):
     # load dataset and split into train and test set
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
+    # upsample all other classes except majority class
     X_train, y_train = upsample_data(X_train, y_train)
 
     # define model
-    #rfc = RandomForestClassifier(n_estimators=300,bootstrap=True, random_state=1, max_depth=200, max_features="sqrt")
+    rfc = RandomForestClassifier(n_estimators=500,bootstrap=True, random_state=1, max_depth=500, max_features="sqrt") #Recall = 0.2489
+    #rfc = RandomForestClassifier(n_estimators=4000,bootstrap=True, random_state=1, max_depth=2000, max_features="sqrt")
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="adam", batch_size=64, max_iter=100, random_state=1, verbose=True) # Recall = 0.3132
     #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=100, random_state=1, verbose=True) #Recall = 0.3904
-    net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="tanh", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=300, random_state=1, verbose=True) #Recall = 0.3060
+    #net = MLPClassifier(hidden_layer_sizes=(X.shape[1],200,150,120,100,80,60,40,y.shape[1]), activation="relu", solver="sgd", learning_rate="adaptive", momentum=0.9, batch_size=64, max_iter=200, random_state=1, verbose=True)
 
-    """
-    # define grid space
-    grid = dict()
-    grid["n_estimators"] = np.arange(100,1000,100).tolist()
-    grid["bootstrap"] = [True]
-    grid["n_jobs"] = [-1]
-    grid["random_state"] = [1]
-    grid["min_samples_leaf"] = np.arange(1,500,50).tolist()
-    grid["min_samples_split"] = np.arange(1,500,50).tolist()
-    grid["max_depth"] = np.arange(500,2000,100).tolist()
-    grid["max_features"] = ["sqrt", "log2", None]
+    # train on training data
+    rfc.fit(X_train, y_train)
 
-    # define evaluation method
-    cv = RepeatedKFold(n_splits=500, n_repeats=10, random_state=1)
-
-    # define performance metric to use
-    scorer = make_scorer(precision_score, average="weighted")
-
-    search = RandomizedSearchCV(estimator=rfc, param_distributions=grid, n_iter=5, scoring=scorer, n_jobs=-1, cv=cv, random_state=1)
-
-    # fit model on training data
-    result = search.fit(X_train, y_train)
-
-    print(result.best_score_)
-    print(result.best_params_)
-    """
-    # predict symptoms
-    #y_pred = result.predict(X_test)
-    net.fit(X_train, y_train)
-    y_pred = net.predict(X_test)
+    # predict symptoms on test input data
+    y_pred = rfc.predict(X_test)
 
     # print performance score based model prediction on test input and true test output
     recall = recall_score(y_test, y_pred, average="weighted")
@@ -445,12 +425,16 @@ def run_ml_model(X, y):
     y_test_new = reverse_one_hot_encoding(y_test)
     y_pred_new= reverse_one_hot_encoding(y_pred)
 
+    # Plot confusion matrix
     plt.title("Accuracy scores of vaccinated femlaes (COVID-19)\n of maternal age from VAERS dataset")
+    labels = ["No SOI","Heart related","Hormone related","Both"]
     sns.heatmap(
         confusion_matrix(y_test_new, y_pred_new),
         cmap="Blues",
         annot=True,
         fmt="d",
+        yticklabels=labels,
+        xticklabels=labels,
     )
     plt.xlabel("Predicted label")
     plt.ylabel("True label")
